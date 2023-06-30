@@ -5,6 +5,12 @@ import PackageDescription
 
 let package = Package(
     name: "NickBaughanApps",
+    defaultLocalization: "en",
+    platforms: [
+        .macOS(.v13),
+        .iOS(.v16),
+        .watchOS(.v9)
+    ],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
