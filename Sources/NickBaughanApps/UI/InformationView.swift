@@ -8,6 +8,12 @@
 import SwiftUI
 
 public struct InformationView: View {
+    public init(iconName: String, title: String? = nil, subtitle: Text? = nil) {
+        self.iconName = iconName
+        self.title = title
+        self.subtitle = subtitle
+    }
+    
     var iconName: String
     var title: String?
     var subtitle: Text?
@@ -27,12 +33,12 @@ public struct InformationView: View {
 //                .foregroundStyle(.secondary)
                 .symbolVariant(.fill)
                 .symbolRenderingMode(.hierarchical)
-                .foregroundStyle(Color("AccentColor2"))
+                .foregroundStyle(Color("Accent2"))
                 .accessibilityHidden(true)
             if let title {
                 Text(title)
                     .font(.title2.bold())
-                    .foregroundStyle(Color("AccentColor2"))
+                    .foregroundStyle(Color("Accent2"))
             }
             if let subtitle {
                 subtitle

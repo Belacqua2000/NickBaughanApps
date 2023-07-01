@@ -1,5 +1,5 @@
 //
-//  SettingsDescriptions.swift
+//  FormViewDescription.swift
 //  Chronoderm
 //
 //  Created by Nick Baughan on 27/12/2022.
@@ -7,7 +7,12 @@
 
 import SwiftUI
 
-public struct SettingsDescriptions: View {
+public struct FormViewDescription: View {
+    public init(imageName: String, description: AttributedString) {
+        self.imageName = imageName
+        self.description = description
+    }
+    
     var imageName: String
     var description: AttributedString
     public var body: some View {
@@ -18,8 +23,8 @@ public struct SettingsDescriptions: View {
     }
 }
 
-struct SettingsDescriptions_Previews: PreviewProvider {
+struct FormViewDescription_Previews: PreviewProvider {
     static var previews: some View {
-        SettingsDescriptions(imageName: "star", description: .init(localized: "Star"))
+        FormViewDescription(imageName: "star", description: .init(localized: "Star"))
     }
 }
