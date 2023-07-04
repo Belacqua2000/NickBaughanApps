@@ -39,6 +39,7 @@ public struct RatingsModel: Sendable {
         let defaults = UserDefaults.standard
         let lastReviewVersion = try? JSONDecoder().decode(Version.self, from: defaults.data(forKey: Self.lastReviewVersionKey) ?? Data())
         let earliestReviewDate = Date(timeIntervalSinceReferenceDate: defaults.double(forKey: Self.earliestReviewDate))
+        logger.info("Earliest review date = \(earliestReviewDate.formatted())")
         if defaults.integer(forKey: Self.significantActionCountKey) >= 5 && lastReviewVersion ?? .version1 < .latest && earliestReviewDate < .now {
             updateReview()
             logger.info("Review should present")
