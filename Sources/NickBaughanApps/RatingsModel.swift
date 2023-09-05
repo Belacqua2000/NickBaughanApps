@@ -17,6 +17,8 @@ public struct RatingsModel: Sendable {
     static let dayOneDate = "dayOneDate"
     static let significantActionCountKey = "significantActionCount"
     
+    static let allKeys = [lastReviewVersionKey, earliestReviewDate, appLaunchedPreviously, dayOneDate, significantActionCountKey]
+    
     /// Set the earliest review date to 24 hours after today.
     public static func markFirstLaunch() {
         let defaults = UserDefaults.standard
