@@ -24,9 +24,11 @@ public struct RatingsModel: Sendable {
         let defaults = UserDefaults.standard
         if !defaults.bool(forKey: Self.appLaunchedPreviously) {
             defaults.set(true, forKey: Self.appLaunchedPreviously)
-            logger.info("App launched first time")
-            defaults.setValue(Date.now.addingTimeInterval(TimeInterval(86_400)).timeIntervalSinceReferenceDate, forKey: Self.earliestReviewDate)
+            logger.info("App launched first time.")
+            let earliestReviewDate = Date.now.addingTimeInterval(TimeInterval(86_400)).timeIntervalSinceReferenceDate
+            defaults.setValue(earliestReviewDate, forKey: Self.earliestReviewDate)
         }
+        logger.info("earliest review date: \(Date(timeIntervalSinceReferenceDate: defaults.double(forKey: Self.earliestReviewDate)))")
     }
     
     /// Check whether to present a review.
@@ -41,8 +43,12 @@ public struct RatingsModel: Sendable {
         let defaults = UserDefaults.standard
         let lastReviewVersion = try? JSONDecoder().decode(Version.self, from: defaults.data(forKey: Self.lastReviewVersionKey) ?? Data())
         let earliestReviewDate = Date(timeIntervalSinceReferenceDate: defaults.double(forKey: Self.earliestReviewDate))
+        let significantActionCount = defaults.integer(forKey: Self.significantActionCountKey)
         logger.info("Earliest review date = \(earliestReviewDate.formatted())")
-        if defaults.integer(forKey: Self.significantActionCountKey) >= 5 && lastReviewVersion ?? .version1 < .latest && earliestReviewDate < .now {
+        logger.info("Last Review Version: \(lastReviewVersion?.id ?? "None")")
+        logger.info("\(lastReviewVersion ?? .version1 < .latest)")
+        logger.info("Significant Action Count: \(significantActionCount)")
+        if significantActionCount >= 5 && lastReviewVersion ?? .version1 < .latest && earliestReviewDate < .now {
             updateReview()
             logger.info("Review should present")
             return true

@@ -88,7 +88,14 @@ extension Version: CaseIterable {
         [version1, version2, version3, version4].sorted()
     }
     
-    public static let latest: Version = allCases.last ?? .version1
+    public static var latest: Version {
+        let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown"
+        let numbers = appVersion.split(separator: ".")
+        let majorNumber = Int(numbers[0]) ?? 1
+        let minorNumber = Int(numbers[1]) ?? 0
+        let patchNumber: Int = numbers.count == 3 ? Int(numbers[2]) ?? 0 : 0
+        return .init(majorNumber: majorNumber, minorNumber: minorNumber, thirdNumber: patchNumber)
+    }
 }
 
 extension Version: Codable {
