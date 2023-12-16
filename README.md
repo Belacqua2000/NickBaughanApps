@@ -1,3 +1,3 @@
 # NickBaughanApps
 
-A description of this package.
+This package provides UI elements and generic model helpers to use across apps.
