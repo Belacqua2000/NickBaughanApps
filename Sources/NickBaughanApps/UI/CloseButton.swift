@@ -27,22 +27,20 @@ public struct CloseButton: ToolbarContent {
         ToolbarItem(placement: placement) {
             Button(action: dismiss.callAsFunction) {
                 Label(title, systemImage: "xmark")
-#if !os(macOS)
-                    .foregroundStyle(.gray)
-#endif
                     .symbolRenderingMode(.hierarchical)
-                    .imageScale(.large)
             }
             .help(Text("Dismiss the current view", comment: "Dismiss button help string"))
 #if !os(watchOS)
             .keyboardShortcut(.cancelAction)
             .symbolVariant(.fill.circle)
+            .imageScale(.large)
 #endif
             
 #if os(iOS)
             .font(.title2)
             .contentShape(.hoverEffect, Circle())
             .hoverEffect(.lift)
+            .foregroundStyle(.gray)
 #elseif os(watchOS)
             .labelStyle(.iconOnly)
 #elseif os(macOS)
