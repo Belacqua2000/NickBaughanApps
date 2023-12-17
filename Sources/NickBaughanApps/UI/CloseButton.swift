@@ -16,7 +16,7 @@ public struct CloseButton: ToolbarContent {
     @Environment(\.dismiss) private var dismiss
     var title: LocalizedStringKey = "Done"
     var placement: ToolbarItemPlacement {
-#if os(macOS)
+#if os(macOS) || os(watchOS)
         .cancellationAction
         #else
         .confirmationAction
