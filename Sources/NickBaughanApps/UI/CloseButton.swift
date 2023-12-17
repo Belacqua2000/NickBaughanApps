@@ -26,7 +26,7 @@ public struct CloseButton: ToolbarContent {
     public var body: some ToolbarContent {
         ToolbarItem(placement: placement) {
             Button(action: dismiss.callAsFunction) {
-                Label(title, systemImage: "xmark.circle.fill")
+                Label(title, systemImage: "xmark")
 #if !os(macOS)
                     .foregroundStyle(.gray)
 #endif
@@ -36,6 +36,7 @@ public struct CloseButton: ToolbarContent {
             .help(Text("Dismiss the current view", comment: "Dismiss button help string"))
 #if !os(watchOS)
             .keyboardShortcut(.cancelAction)
+            .symbolVariant(.fill.circle)
 #endif
             
 #if os(iOS)
