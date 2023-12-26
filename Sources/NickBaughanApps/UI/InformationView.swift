@@ -20,7 +20,7 @@ public struct InformationView: View {
     
     static var size: Double {
         #if os(watchOS)
-        48
+        32
         #else
         64
         #endif
@@ -39,6 +39,9 @@ public struct InformationView: View {
                 Text(title)
                     .font(.title2.bold())
                     .foregroundStyle(Color("Accent2"))
+                    #if os(watchOS)
+                    .minimumScaleFactor(0.6)
+                    #endif
             }
             if let subtitle {
                 subtitle
