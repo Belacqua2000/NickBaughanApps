@@ -40,7 +40,7 @@ public struct CloseButton: ToolbarContent {
             .font(.title2)
             .contentShape(.hoverEffect, Circle())
             .hoverEffect(.lift)
-            .foregroundStyle(.gray)
+            .tint(.gray)
 #elseif os(watchOS)
             .labelStyle(.iconOnly)
 #elseif os(macOS)
