@@ -32,9 +32,11 @@ public struct CloseButton: ToolbarContent {
             .help(Text("Dismiss the current view", comment: "Dismiss button help string"))
 #if !os(watchOS)
             .keyboardShortcut(.cancelAction)
-            .symbolVariant(.fill.circle)
             .imageScale(.large)
 #endif
+            #if os(iOS) || os(macOS)
+            .symbolVariant(.fill.circle)
+            #endif
             
 #if os(iOS)
             .font(.title2)

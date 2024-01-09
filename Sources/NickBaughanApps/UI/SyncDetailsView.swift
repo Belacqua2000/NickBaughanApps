@@ -64,7 +64,7 @@ public struct SyncDetailsView: View {
                     .font(.headline)
                     .headerProminence(.increased)
                     .textCase(nil)
-                    .foregroundStyle(.purple)
+                    .foregroundStyle(Color("Accent2"))
             }
             
             Section {
@@ -75,7 +75,7 @@ public struct SyncDetailsView: View {
                     .font(.headline)
                     .headerProminence(.increased)
                     .textCase(nil)
-                    .foregroundStyle(.purple)
+                    .foregroundStyle(Color("Accent2"))
             }
         }
         .navigationTitle("iCloud Sync Status")
