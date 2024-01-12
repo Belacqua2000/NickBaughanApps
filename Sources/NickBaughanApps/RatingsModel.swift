@@ -14,6 +14,7 @@ import OSLog
 public final class RatingsModel: Sendable {
     
     /// Create a new RatingsModel to use throughout your app.
+    ///
     /// - Parameter minimumSignificantActionCount: The minimum amount of times you wish an action to occur before prompting for a review.
     /// - Parameter minimumTimeSinceFirstLaunch: The minimum amount of time you wish to wait before prompting for a review after first launching the app.
     /// - Parameter minimumTimeBetweenRequests: The minimum amount of time you wish to wait before prompting for a review after the previous review.
@@ -24,13 +25,12 @@ public final class RatingsModel: Sendable {
     }
     
     static let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "Ratings")
-    static let lastReviewVersionKey = "lastReviewVersion"
     static let earliestReviewDate = "minimumReviewDate"
     static let appLaunchedPreviously = "appLaunchedPreviously"
     static let dayOneDate = "dayOneDate"
     static let significantActionCountKey = "significantActionCount"
     
-    static let allKeys = [lastReviewVersionKey, earliestReviewDate, appLaunchedPreviously, dayOneDate, significantActionCountKey]
+    static let allKeys = [earliestReviewDate, appLaunchedPreviously, dayOneDate, significantActionCountKey]
     
     let minimumSignificantActionCount: Int
     let minimumTimeSinceFirstLaunch: TimeInterval
@@ -48,24 +48,20 @@ public final class RatingsModel: Sendable {
         Self.logger.info("earliest review date: \(Date(timeIntervalSinceReferenceDate: defaults.double(forKey: Self.earliestReviewDate)))")
     }
     
-    /// Check whether to present a review.
+    /// Mark a significant action as occurring and ask for a review if criteria are met.
     ///
     /// Conditions for reviews:
     /// - Certain number of significant actions passed.
-    /// - Not the current app version
     /// - Certain amount of time passed.  1 month?
     /// - Returns: Whether to present a review request.
     public func shouldPresentReview() -> Bool {
         appendSignificantActionCount()
         let defaults = UserDefaults.standard
-        let lastReviewVersion = try? JSONDecoder().decode(Version.self, from: defaults.data(forKey: Self.lastReviewVersionKey) ?? Data())
         let earliestReviewDate = Date(timeIntervalSinceReferenceDate: defaults.double(forKey: Self.earliestReviewDate))
         let significantActionCount = defaults.integer(forKey: Self.significantActionCountKey)
         Self.logger.info("Earliest review date = \(earliestReviewDate.formatted())")
-        Self.logger.info("Last Review Version: \(lastReviewVersion?.id ?? "None")")
-        Self.logger.info("\(lastReviewVersion ?? .version1 < .latest)")
         Self.logger.info("Significant Action Count: \(significantActionCount)")
-        if significantActionCount >= minimumSignificantActionCount && lastReviewVersion ?? .version1 < .latest && earliestReviewDate < .now {
+        if significantActionCount >= minimumSignificantActionCount && earliestReviewDate < .now {
             Self.logger.info("Review should present")
             return true
         } else {
@@ -78,11 +74,11 @@ public final class RatingsModel: Sendable {
     public func reviewDidPresent() {
         Self.logger.info("Updating review condition.")
         let defaults = UserDefaults.standard
-        defaults.setValue(try? JSONEncoder().encode(Version.latest), forKey: Self.lastReviewVersionKey)
         defaults.setValue(Date.now.addingTimeInterval(minimumTimeBetweenRequests).timeIntervalSinceReferenceDate, forKey: Self.earliestReviewDate)
     }
     
-    private func appendSignificantActionCount() {
+    /// Mark a significant action as occurring without asking for a review.
+    public func appendSignificantActionCount() {
         var significantActionCount = UserDefaults.standard.integer(forKey: Self.significantActionCountKey)
         significantActionCount += 1
         Self.logger.info("Updating action count to \(significantActionCount)")
