@@ -8,19 +8,20 @@
 import SwiftUI
 import CoreData
 
+@available(iOS 17.0, macOS 14, watchOS 10, *)
 public struct SyncDetailsView: View {
-    public init() { }
+    @Environment(iCloudSyncModel.self) private var syncModel
     
-    @AppStorage("lastSync") private var lastSync: Double?
-    @AppStorage("currentSyncStart") private var currentSyncStart: Double?
-    @State private var currentEvent: NSPersistentCloudKitContainer.Event? = nil
+//    @AppStorage("lastSync") private var lastSync: Double?
+//    @AppStorage("currentSyncStart") private var currentSyncStart: Double?
+//    @State private var currentEvent: NSPersistentCloudKitContainer.Event? = nil
     
-    @AppStorage("syncError") private var syncError: String?
-    @State private var failureAlertPresented: Bool = false
-    @State private var detailsPresented: Bool = false
+//    @AppStorage("syncError") private var syncError: String?
+//    @State private var failureAlertPresented: Bool = false
+//    @State private var detailsPresented: Bool = false
     
     var lastSyncDate: String {
-        if let lastSync {
+        if let lastSync = syncModel.lastSync {
             let date = Date(timeIntervalSince1970: lastSync)
             let format: Date.FormatStyle
             if Calendar.current.isDateInToday(date) {
@@ -33,18 +34,12 @@ public struct SyncDetailsView: View {
         return String("Never")
     }
     
-    var currentSyncDate: String {
-        if let currentSyncStart {
+    var currentSyncDate: Text {
+        if let currentSyncStart = syncModel.currentSyncStart {
             let date = Date(timeIntervalSince1970: currentSyncStart)
-            let format: Date.FormatStyle
-            if Calendar.current.isDateInToday(date) {
-                format = .init(date: .omitted, time: .shortened, capitalizationContext: .middleOfSentence)
-            } else {
-                format = .init(date: .numeric, time: .shortened, capitalizationContext: .middleOfSentence)
-            }
-            return date.formatted(format)
+            return Text(date, style: .relative)
         }
-        return String("Never")
+        return Text("Never")
     }
     
     public var body: some View {
@@ -53,62 +48,49 @@ public struct SyncDetailsView: View {
             Section {
                 LabeledContent(
                     "Sync Status",
-                    value: currentEvent != nil && currentEvent?.endDate == nil && currentEvent?.error == nil ? "In Progress" : "Not in Progress"
+                    value: syncModel.syncInProgress ? "In Progress" : "Not in Progress"
                 )
-                if let currentEvent, currentEvent.endDate == nil, currentEvent.error == nil {
-                    LabeledContent("Type", value: descriptionFor(currentEvent.type))
-                    LabeledContent("Start Date", value: currentSyncDate)
+                if syncModel.syncInProgress, let description = syncModel.currentSyncDescription {
+                    LabeledContent("Type", value: description)
+                    LabeledContent("Start Date") {
+                        currentSyncDate
+                    }
                 }
             } header: {
                 Text("Current Sync")
                     .font(.headline)
                     .headerProminence(.increased)
                     .textCase(nil)
-                    .foregroundStyle(Color("Accent2"))
+                    .foregroundStyle(.purple)
             }
             
             Section {
                 LabeledContent("Last Sync Date", value: lastSyncDate)
-                LabeledContent("Error", value: syncError ?? "None")
+                LabeledContent("Error", value: syncModel.syncError?.localizedDescription ?? "None")
             } header: {
                 Text("Last Sync")
                     .font(.headline)
                     .headerProminence(.increased)
                     .textCase(nil)
-                    .foregroundStyle(Color("Accent2"))
+                    .foregroundStyle(.purple)
             }
         }
         .navigationTitle("iCloud Sync Status")
         #if !os(macOS)
         .navigationBarTitleDisplayMode(.inline)
         #endif
-        .onReceive(NotificationCenter.default.publisher(for: NSPersistentCloudKitContainer.eventChangedNotification, object: nil), perform: iCloudSyncChanged)
     }
     
-    private func iCloudSyncChanged(output: NotificationCenter.Publisher.Output) {
-        guard let event = output.userInfo?[NSPersistentCloudKitContainer.eventNotificationUserInfoKey] as? NSPersistentCloudKitContainer.Event else { return }
+//    private func iCloudSyncChanged(output: NotificationCenter.Publisher.Output) {
+//        guard let event = output.userInfo?[NSPersistentCloudKitContainer.eventNotificationUserInfoKey] as? NSPersistentCloudKitContainer.Event else { return }
         
-        print("iCloud sync changed")
-        print(event)
-        lastSync = event.startDate.timeIntervalSince1970
-        lastSync = event.endDate?.timeIntervalSince1970
-        syncError = event.error?.localizedDescription
-    }
-    
-    private func descriptionFor(_ eventType: NSPersistentCloudKitContainer.EventType) -> String {
-        switch eventType {
-        case .setup:
-            "Setting Up Sync"
-        case .import:
-            "Downloading Data"
-        case .export:
-            "Uploading Data"
-        @unknown default:
-            "Unknown"
-        }
-    }
+//        currentSyncStart = event.startDate.timeIntervalSince1970
+//        lastSync = event.endDate?.timeIntervalSince1970
+//        syncError = event.error?.localizedDescription
+//    }
 }
 
+@available(iOS 17.0, macOS 14, watchOS 10, *)
 #Preview {
     SyncDetailsView()
 }
