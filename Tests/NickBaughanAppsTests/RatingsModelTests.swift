@@ -1,6 +1,7 @@
 import XCTest
 @testable import NickBaughanApps
 
+@available(iOS 17, *)
 final class RatingsModelTests: XCTestCase {
     
     override class func setUp() {
@@ -17,7 +18,7 @@ final class RatingsModelTests: XCTestCase {
     
     func testShouldPresentReviewCount() throws {
         for _ in 0..<5 {
-            let _ = RatingsModel.shouldPresentReview()
+            let _ = RatingsModel(minimumSignificantActionCount: 5, minimumTimeSinceFirstLaunch: 84_600, minimumTimeBetweenRequests: 84_600*28).shouldPresentReview()
         }
         
         let actionCount = UserDefaults.standard.integer(forKey: RatingsModel.significantActionCountKey)

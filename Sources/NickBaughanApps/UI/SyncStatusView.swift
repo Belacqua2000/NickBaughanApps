@@ -9,7 +9,9 @@ import SwiftUI
 import CoreData
 
 @available(iOS 17.0, macOS 14, watchOS 10, *)
-struct SyncStatusView: View {
+public struct SyncStatusView: View {
+    public init() { }
+    
     @State private var failureAlertPresented: Bool = false
     
     @Environment(iCloudSyncModel.self) private var syncModel
@@ -41,7 +43,7 @@ struct SyncStatusView: View {
         }
     }
     
-    var body: some View {
+    public var body: some View {
         if let labelInfo {
             VStack(spacing: 0) {
                 Image(systemName: labelInfo.iconName)

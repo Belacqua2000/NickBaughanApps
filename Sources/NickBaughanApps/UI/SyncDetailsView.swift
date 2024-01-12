@@ -10,6 +10,8 @@ import CoreData
 
 @available(iOS 17.0, macOS 14, watchOS 10, *)
 public struct SyncDetailsView: View {
+    public init() { }
+    
     @Environment(iCloudSyncModel.self) private var syncModel
     
 //    @AppStorage("lastSync") private var lastSync: Double?
