@@ -10,7 +10,7 @@ import OSLog
 
 @available(iOS 17.0, macOS 14, watchOS 10, *)
 @Observable
-class iCloudSyncModel {
+public class iCloudSyncModel {
     public init(syncInProgress: Bool = false, syncError: Error? = nil, detailsPresented: Bool = false) {
         self.syncInProgress = syncInProgress
         self.syncError = syncError
