@@ -7,6 +7,9 @@
 import SwiftUI
 import CoreData
 import OSLog
+#if canImport(WidgetKit)
+import WidgetKit
+#endif
 
 @available(iOS 17.0, macOS 14, watchOS 10, *)
 @Observable
@@ -84,6 +87,9 @@ public class iCloudSyncModel {
                         currentSyncDescription = event.type.userDescription
                     } else {
                         currentSyncDescription = nil
+                        #if canImport(WidgetKit)
+                        WidgetCenter.shared.reloadAllTimelines()
+                        #endif
                     }
                     logger.debug("Current Description: \(self.currentSyncDescription ?? "NIL")")
                     
