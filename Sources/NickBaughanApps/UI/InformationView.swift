@@ -64,8 +64,6 @@ public struct InformationView: View {
     }
 }
 
-struct InformationView_Previews: PreviewProvider {
-    static var previews: some View {
-        InformationView(iconName: "heart", title: "Favourites", subtitle: Text("No favourites"))
-    }
+#Preview {
+    InformationView(iconName: "heart", title: String("Favourites"), subtitle: Text(verbatim: "No favourites"))
 }

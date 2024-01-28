@@ -8,13 +8,13 @@
 import SwiftUI
 
 public struct CloseButton: ToolbarContent {
-    public init() { }
-    public init(title: LocalizedStringKey = "Done") {
-        self.title = title
+//    public init() { }
+    public init(title: String? = nil) {
+        self.title = title ?? String(localized: "Done", bundle: .module, comment: "The title of the close button.")
     }
     
     @Environment(\.dismiss) private var dismiss
-    var title: LocalizedStringKey = "Done"
+    var title: String
     var placement: ToolbarItemPlacement {
 #if os(macOS) || os(watchOS)
         .cancellationAction
@@ -29,7 +29,7 @@ public struct CloseButton: ToolbarContent {
                 Label(title, systemImage: "xmark")
                     .symbolRenderingMode(.hierarchical)
             }
-            .help(Text("Dismiss the current view", comment: "Dismiss button help string"))
+            .help(Text("Dismiss the current view", bundle: .module, comment: "The help descriptor for the close button."))
 #if !os(watchOS)
             .keyboardShortcut(.cancelAction)
             .imageScale(.large)

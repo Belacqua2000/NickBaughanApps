@@ -24,11 +24,11 @@ public struct SyncStatusView: View {
         #endif
     }
     
-    var labelInfo: (title: Text, iconName: String)? {
-        if syncModel.syncInProgress {
-            return (Text(syncModel.currentSyncDescription ?? "Syncing in Progress"), "arrow.clockwise.icloud")
+    var labelInfo: (title: String, iconName: String)? {
+        if syncModel.syncInProgress, let description = syncModel.currentSyncDescription {
+            return (description, "arrow.clockwise.icloud")
         } else if syncModel.syncError != nil {
-            return (Text("iCloud Sync Failed"), "xmark.icloud")
+            return (String(localized: "iCloud Sync Failed", bundle: .module, comment: "Sync status view text option."), "xmark.icloud")
         } else if let lastSync = syncModel.lastSync {
             let date = Date(timeIntervalSince1970: lastSync)
             let format: Date.FormatStyle
@@ -37,7 +37,7 @@ public struct SyncStatusView: View {
             } else {
                 format = .init(date: .numeric, time: .shortened, capitalizationContext: .middleOfSentence)
             }
-            return (Text("Last Synced: \(date.formatted(format))"), "checkmark.icloud")
+            return (String(localized: "Last Synced: \(date.formatted(format))", bundle: .module, comment: "Sync status view text option."), "checkmark.icloud")
         } else {
             return nil
         }
@@ -50,7 +50,7 @@ public struct SyncStatusView: View {
                     .foregroundStyle(Color.accentColor)
                     .symbolVariant(.fill)
                     .font(.headline)
-                Text("iCloud Status")
+                Text("iCloud Status", comment: "iCloud status view header.")
                     .font(.headline)
                 HStack(spacing: 5) {
                     #if !os(watchOS)
@@ -60,7 +60,7 @@ public struct SyncStatusView: View {
                             .controlSize(.mini)
                     }
                     #endif
-                    labelInfo.title
+                    Text(labelInfo.title)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
                 }
@@ -68,15 +68,15 @@ public struct SyncStatusView: View {
                     Button {
                         failureAlertPresented = true
                     } label: {
-                        Label("More Details", systemImage: "info.circle")
+                        Label(String(localized: "More Details", bundle: .module, comment: "The button title to show why an iCloud sync failed."), systemImage: "info.circle")
                     }
                     .labelStyle(.iconOnly)
-                    .help("View additional details about the sync error.")
+                    .help(String(localized: "View additional details about the sync error", bundle: .module, comment: "The help string for the button to show why an iCloud sync failed."))
                     .buttonStyle(.borderless)
                 }
             }
             .symbolRenderingMode(.hierarchical)
-            .alert("Sync Failed", isPresented: $failureAlertPresented) {} message: {
+            .alert(String(localized: "Sync Failed", bundle: .module, comment: "The alert title for iCloud Sync falure"), isPresented: $failureAlertPresented) {} message: {
                 if let syncError = syncModel.syncError {
                     Text(syncError.localizedDescription)
                 }

@@ -102,17 +102,18 @@ public class iCloudSyncModel {
     }
 }
 
+@available(iOS 17.0, *)
 extension NSPersistentCloudKitContainer.EventType {
     var userDescription: String {
         switch self {
         case .setup:
-            "Setting Up Sync"
+            String(localized: "Setting Up Sync", bundle: Bundle(for: iCloudSyncModel.self), comment: "iCloud Sync Status user description")
         case .import:
-            "Downloading Data"
+            String(localized: "Downloading Data", bundle: Bundle(for: iCloudSyncModel.self), comment: "iCloud Sync Status user description")
         case .export:
-            "Uploading Data"
+            String(localized: "Uploading Data", bundle: Bundle(for: iCloudSyncModel.self), comment: "iCloud Sync Status user description")
         @unknown default:
-            "Unknown"
+            String(localized: "Unknown", bundle: Bundle(for: iCloudSyncModel.self), comment: "iCloud Sync Status user description")
         }
     }
 }

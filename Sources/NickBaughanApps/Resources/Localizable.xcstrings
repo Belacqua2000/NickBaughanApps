@@ -1,0 +1,353 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "Current Sync" : {
+      "comment" : "Sync details section header.",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Current Sync"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sincronizzazione In Corso"
+          }
+        }
+      }
+    },
+    "Dismiss the current view" : {
+      "comment" : "The help descriptor for the close button.",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dismiss the current view"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chiusa la vista"
+          }
+        }
+      }
+    },
+    "Done" : {
+      "comment" : "The title of the close button.",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Done"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fine"
+          }
+        }
+      }
+    },
+    "Downloading Data" : {
+      "comment" : "iCloud Sync Status user description",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Downloading Data"
+          }
+        }
+      }
+    },
+    "Error" : {
+      "comment" : "iCloud sync details stat title.",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Errore"
+          }
+        }
+      }
+    },
+    "iCloud Status" : {
+      "comment" : "iCloud status view header.\nThe navigation title for the sync details view.",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud Status"
+          }
+        }
+      }
+    },
+    "iCloud Sync Failed" : {
+      "comment" : "Sync status view text option.",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud Sync Failed"
+          }
+        }
+      }
+    },
+    "Last Sync" : {
+      "comment" : "Sync details section header.",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last Sync"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ultima Sincronizzazione"
+          }
+        }
+      }
+    },
+    "Last Sync Date" : {
+      "comment" : "iCloud sync details stat title.",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last Sync Date"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Data dell'Ultima Sincronizzazione"
+          }
+        }
+      }
+    },
+    "Last Synced: %@" : {
+      "comment" : "Sync status view text option.",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last Synced: %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ultima Sincronizzazione: %@"
+          }
+        }
+      }
+    },
+    "More Details" : {
+      "comment" : "The button title to show why an iCloud sync failed.",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "More Details"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Più Dettagli"
+          }
+        }
+      }
+    },
+    "Never" : {
+      "comment" : "Last sync date text",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Never"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mai"
+          }
+        }
+      }
+    },
+    "No favourites" : {
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No favourites"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nessuna preferiti"
+          }
+        }
+      }
+    },
+    "Setting Up Sync" : {
+      "comment" : "iCloud Sync Status user description",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Setting Up Sync"
+          }
+        }
+      }
+    },
+    "Star" : {
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Star"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stella"
+          }
+        }
+      }
+    },
+    "Start Date" : {
+      "comment" : "iCloud sync details stat title.",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start Date"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Data di Inizio"
+          }
+        }
+      }
+    },
+    "Status" : {
+      "comment" : "iCloud sync details stat title.",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Status"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stato"
+          }
+        }
+      }
+    },
+    "Sync Failed" : {
+      "comment" : "The alert title for iCloud Sync falure",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sync Failed"
+          }
+        }
+      }
+    },
+    "Type" : {
+      "comment" : "iCloud sync details stat title.",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Type"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tipo"
+          }
+        }
+      }
+    },
+    "Unknown" : {
+      "comment" : "iCloud Sync Status user description",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unknown"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incognita"
+          }
+        }
+      }
+    },
+    "Uploading Data" : {
+      "comment" : "iCloud Sync Status user description",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uploading Data"
+          }
+        }
+      }
+    },
+    "View additional details about the sync error" : {
+      "comment" : "The help string for the button to show why an iCloud sync failed.",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "View additional details about the sync error"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostra più dettagli dell'errore"
+          }
+        }
+      }
+    },
+    "View the current iCloud Sync Status." : {
+      "comment" : "The iCloud sync status view description.",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "View the current iCloud Sync Status."
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

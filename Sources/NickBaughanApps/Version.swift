@@ -22,7 +22,7 @@ public struct Version: Identifiable, Hashable {
         }
     }
     
-    public static let version1 = Version(majorNumber: 1, minorNumber: 1, thirdNumber: 0, newFeatures: [
+    /*public static let version1 = Version(majorNumber: 1, minorNumber: 1, thirdNumber: 0, newFeatures: [
         .init(title: "Shortcuts and Siri", description: "Derm Diary features next-level integration with the Shortcuts app!  18 actions to create, find, edit, open, and share your diaries and entries are ready to be integrated into your workflows.", image: "gearshape.2"),
         .init(title: "Diaries and Bookmarks", description: "Skin features have been renamed to skin diaries.  Add bookmarks to notable entries to view them separately.", image: "text.book.closed"),
         .init(title: "iOS 16 Ready", description: "Derm Diary is designed and ready for iOS 16.", image: "square.and.arrow.down"),
@@ -62,7 +62,7 @@ public struct Version: Identifiable, Hashable {
         .init(title: "New Design", description: .init(localized: "Browse your diaries with ease using the new interactive timeline, grid view, and clearer colors."), image: "star"),
         .init(title: "Export Backup", description: .init(localized: "Export diaries to a _.dermdiary_ archive file to create a backup of your data."), image: "archivebox"),
         .init(title: "Other Changes", description: .init(localized: "Larger widget sizes, multiple selection, data controls, Shortcuts updates, and bug fixes."), image: "ellipsis.circle")
-    ])
+    ])*/
 }
 
 extension Version: Comparable {
@@ -85,7 +85,7 @@ extension Version: Comparable {
 
 extension Version: CaseIterable {
     public static var allCases: [Version] {
-        [version1, version2, version3, version4].sorted()
+        []//[version1, version2, version3, version4].sorted()
     }
     
     public static var latest: Version {

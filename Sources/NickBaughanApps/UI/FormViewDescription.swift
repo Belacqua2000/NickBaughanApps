@@ -23,8 +23,6 @@ public struct FormViewDescription: View {
     }
 }
 
-struct FormViewDescription_Previews: PreviewProvider {
-    static var previews: some View {
-        FormViewDescription(imageName: "star", description: .init(localized: "Star"))
-    }
+#Preview {
+    FormViewDescription(imageName: "star", description: "Star")
 }

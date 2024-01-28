@@ -14,14 +14,6 @@ public struct SyncDetailsView: View {
     
     @Environment(iCloudSyncModel.self) private var syncModel
     
-//    @AppStorage("lastSync") private var lastSync: Double?
-//    @AppStorage("currentSyncStart") private var currentSyncStart: Double?
-//    @State private var currentEvent: NSPersistentCloudKitContainer.Event? = nil
-    
-//    @AppStorage("syncError") private var syncError: String?
-//    @State private var failureAlertPresented: Bool = false
-//    @State private var detailsPresented: Bool = false
-    
     var lastSyncDate: String {
         if let lastSync = syncModel.lastSync {
             let date = Date(timeIntervalSince1970: lastSync)
@@ -33,33 +25,36 @@ public struct SyncDetailsView: View {
             }
             return date.formatted(format)
         }
-        return String("Never")
+        return String(localized: "Never", bundle: .module, comment: "Last sync date text")
     }
     
-    var currentSyncDate: Text {
+    var currentSyncDateOffset: Text {
         if let currentSyncStart = syncModel.currentSyncStart {
             let date = Date(timeIntervalSince1970: currentSyncStart)
             return Text(date, style: .relative)
         }
-        return Text("Never")
+        return Text("Never", bundle: .module, comment: "Last sync date text")
     }
     
     public var body: some View {
         Form {
-            FormViewDescription(imageName: "icloud", description: AttributedString(localized: "View the current iCloud Sync Status."))
+            FormViewDescription(imageName: "icloud", description: AttributedString(localized: "View the current iCloud Sync Status.", bundle: .module, comment: "The iCloud sync status view description."))
             Section {
                 LabeledContent(
-                    "Sync Status",
+                    String(localized: "Status", bundle: .module, comment: "iCloud sync details stat title."),
                     value: syncModel.syncInProgress ? "In Progress" : "Not in Progress"
                 )
                 if syncModel.syncInProgress, let description = syncModel.currentSyncDescription {
-                    LabeledContent("Type", value: description)
-                    LabeledContent("Start Date") {
-                        currentSyncDate
+                    LabeledContent(
+                        String(localized: "Type", bundle: .module, comment: "iCloud sync details stat title."),
+                        value: description)
+                    LabeledContent(
+                        String(localized: "Start Date", bundle: .module, comment: "iCloud sync details stat title.")) {
+                        currentSyncDateOffset
                     }
                 }
             } header: {
-                Text("Current Sync")
+                Text("Current Sync", bundle: .module, comment: "Sync details section header.")
                     .font(.headline)
                     .headerProminence(.increased)
                     .textCase(nil)
@@ -67,29 +62,21 @@ public struct SyncDetailsView: View {
             }
             
             Section {
-                LabeledContent("Last Sync Date", value: lastSyncDate)
-                LabeledContent("Error", value: syncModel.syncError?.localizedDescription ?? "None")
+                LabeledContent(String(localized: "Last Sync Date", bundle: .module, comment: "iCloud sync details stat title."), value: lastSyncDate)
+                LabeledContent(String(localized: "Error", bundle: .module, comment: "iCloud sync details stat title."), value: syncModel.syncError?.localizedDescription ?? "None")
             } header: {
-                Text("Last Sync")
+                Text("Last Sync", bundle: .module, comment: "Sync details section header.")
                     .font(.headline)
                     .headerProminence(.increased)
                     .textCase(nil)
                     .foregroundStyle(.purple)
             }
         }
-        .navigationTitle("iCloud Sync Status")
+        .navigationTitle(Text("iCloud Status", bundle: .module, comment: "The navigation title for the sync details view."))
         #if !os(macOS)
         .navigationBarTitleDisplayMode(.inline)
         #endif
     }
-    
-//    private func iCloudSyncChanged(output: NotificationCenter.Publisher.Output) {
-//        guard let event = output.userInfo?[NSPersistentCloudKitContainer.eventNotificationUserInfoKey] as? NSPersistentCloudKitContainer.Event else { return }
-        
-//        currentSyncStart = event.startDate.timeIntervalSince1970
-//        lastSync = event.endDate?.timeIntervalSince1970
-//        syncError = event.error?.localizedDescription
-//    }
 }
 
 @available(iOS 17.0, macOS 14, watchOS 10, *)
