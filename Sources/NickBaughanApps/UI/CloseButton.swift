@@ -8,7 +8,9 @@
 import SwiftUI
 
 public struct CloseButton: ToolbarContent {
-//    public init() { }
+    public init() {
+        self.title = String(localized: "Done", bundle: .module, comment: "The title of the close button.")
+    }
     public init(title: String? = nil) {
         self.title = title ?? String(localized: "Done", bundle: .module, comment: "The title of the close button.")
     }
