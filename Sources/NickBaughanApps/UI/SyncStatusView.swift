@@ -8,7 +8,7 @@
 import SwiftUI
 import CoreData
 
-@available(iOS 17.0, macOS 14, watchOS 10, *)
+@available(iOS 17.0, macOS 14, watchOS 10, tvOS 17, *)
 public struct SyncStatusView: View {
     public init() { }
     
@@ -53,7 +53,7 @@ public struct SyncStatusView: View {
                 Text("iCloud Status", comment: "iCloud status view header.")
                     .font(.headline)
                 HStack(spacing: 5) {
-                    #if !os(watchOS)
+                    #if !os(watchOS) && !os(tvOS)
                     if syncModel.syncInProgress {
                         ProgressView()
                             .progressViewStyle(.circular)
@@ -88,7 +88,7 @@ public struct SyncStatusView: View {
     }
 }
 
-@available(iOS 17.0, macOS 14, watchOS 10, *)
+@available(iOS 17.0, macOS 14, watchOS 10, tvOS 17, *)
 #Preview {
     SyncStatusView()
         .environment(iCloudSyncModel())

@@ -8,7 +8,7 @@
 import SwiftUI
 import CoreData
 
-@available(iOS 17.0, macOS 14, watchOS 10, *)
+@available(iOS 17.0, macOS 14, watchOS 10, tvOS 17, *)
 public struct SyncDetailsView: View {
     public init() { }
     
@@ -73,13 +73,11 @@ public struct SyncDetailsView: View {
             }
         }
         .navigationTitle(Text("iCloud Status", bundle: .module, comment: "The navigation title for the sync details view."))
-        #if !os(macOS)
-        .navigationBarTitleDisplayMode(.inline)
-        #endif
+        .toolbarTitleDisplayMode(.inline)
     }
 }
 
-@available(iOS 17.0, macOS 14, watchOS 10, *)
+@available(iOS 17.0, macOS 14, watchOS 10, tvOS 17, *)
 #Preview {
     SyncDetailsView()
 }

@@ -11,7 +11,7 @@ import OSLog
 import WidgetKit
 #endif
 
-@available(iOS 17.0, macOS 14, watchOS 10, *)
+@available(iOS 17.0, macOS 14, watchOS 10, tvOS 17, *)
 @Observable
 public class iCloudSyncModel {
     public init(syncInProgress: Bool = false, syncError: Error? = nil, detailsPresented: Bool = false) {

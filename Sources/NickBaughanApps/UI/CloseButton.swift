@@ -30,7 +30,7 @@ public struct CloseButton: ToolbarContent {
                     .symbolRenderingMode(.hierarchical)
             }
             .help(Text("Dismiss the current view", bundle: .module, comment: "The help descriptor for the close button."))
-#if !os(watchOS)
+#if !os(watchOS) && !os(tvOS)
             .keyboardShortcut(.cancelAction)
             .imageScale(.large)
 #endif

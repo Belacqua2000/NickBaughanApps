@@ -81,7 +81,7 @@
       }
     },
     "iCloud Status" : {
-      "comment" : "iCloud status view header.\nThe navigation title for the sync details view.",
+      "comment" : "The navigation title for the sync details view.\niCloud status view header.",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {

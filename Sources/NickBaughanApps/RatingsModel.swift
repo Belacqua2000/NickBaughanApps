@@ -9,7 +9,7 @@ import Foundation
 import StoreKit
 import OSLog
 
-@available(iOS 17, macOS 14, watchOS 10, *)
+@available(iOS 17, macOS 14, watchOS 10, tvOS 17, *)
 @Observable
 public final class RatingsModel: Sendable {
     
