@@ -26,34 +26,41 @@ public struct CloseButton: ToolbarContent {
     public var body: some ToolbarContent {
         ToolbarItem(placement: placement) {
             Button(action: dismiss.callAsFunction) {
-                Label(title, systemImage: "xmark")
-                    .symbolRenderingMode(.hierarchical)
+                #if os(iOS)
+                Image(systemName: "xmark")
+                    .accessibilityLabel("Close")
+                #else
+                Label("Close", systemName: "xmark")
+                #endif
             }
             .help(Text("Dismiss the current view", bundle: .module, comment: "The help descriptor for the close button."))
-#if !os(watchOS) && !os(tvOS)
+            #if !os(watchOS) && !os(tvOS)
             .keyboardShortcut(.cancelAction)
             .imageScale(.large)
-#endif
-            #if os(iOS) || os(macOS)
-            .symbolVariant(.fill.circle)
             #endif
-            
-#if os(iOS)
+        
+            #if os(iOS)
+            .symbolVariant(.fill.circle)
             .font(.title2)
-            .contentShape(.hoverEffect, Circle())
+            .contentShape(.hoverEffect, .circle)
             .hoverEffect(.lift)
             .tint(.gray)
-#elseif os(watchOS)
+            .symbolRenderingMode(.hierarchical)
+            #elseif os(watchOS)
             .labelStyle(.iconOnly)
-#elseif os(macOS)
+            #elseif os(macOS)
             .labelStyle(.titleOnly)
-#endif
+            #endif
         }
     }
 }
 
-/*struct CloseButton_Previews: PreviewProvider {
-    static var previews: some View {
-        CloseButton()
-    }
-}*/
+#Preview {
+    Text("Hello, world!")
+        .sheet(isPresented: .constant(true)) {
+            NavigationStack {
+                Text("Hello, world!")
+                    .toolbar(content: CloseButton.init)
+            }
+        }
+}
