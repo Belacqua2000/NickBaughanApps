@@ -30,7 +30,7 @@ public struct CloseButton: ToolbarContent {
                 Image(systemName: "xmark")
                     .accessibilityLabel("Close")
                 #else
-                Label("Close", systemName: "xmark")
+                Label("Close", systemImage: "xmark")
                 #endif
             }
             .help(Text("Dismiss the current view", bundle: .module, comment: "The help descriptor for the close button."))
