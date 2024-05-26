@@ -1,9 +1,6 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "Close" : {
-
-    },
     "Current Sync" : {
       "comment" : "Sync details section header.",
       "localizations" : {
@@ -82,9 +79,6 @@
           }
         }
       }
-    },
-    "Hello, world!" : {
-
     },
     "iCloud Status" : {
       "comment" : "The navigation title for the sync details view.\niCloud status view header.",

@@ -28,9 +28,9 @@ public struct CloseButton: ToolbarContent {
             Button(action: dismiss.callAsFunction) {
                 #if os(iOS)
                 Image(systemName: "xmark")
-                    .accessibilityLabel("Close")
+                    .accessibilityLabel(title)
                 #else
-                Label("Close", systemImage: "xmark")
+                Label(title, systemImage: "xmark")
                 #endif
             }
             .help(Text("Dismiss the current view", bundle: .module, comment: "The help descriptor for the close button."))
@@ -56,10 +56,10 @@ public struct CloseButton: ToolbarContent {
 }
 
 #Preview {
-    Text("Hello, world!")
+    Color.blue
         .sheet(isPresented: .constant(true)) {
             NavigationStack {
-                Text("Hello, world!")
+                Color.pink
                     .toolbar(content: CloseButton.init)
             }
         }
