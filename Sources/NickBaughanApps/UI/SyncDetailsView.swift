@@ -55,10 +55,10 @@ public struct SyncDetailsView: View {
                 }
             } header: {
                 Text("Current Sync", bundle: .module, comment: "Sync details section header.")
-                    .font(.headline)
-                    .headerProminence(.increased)
-                    .textCase(nil)
-                    .foregroundStyle(.purple)
+//                    .font(.headline)
+//                    .headerProminence(.increased)
+//                    .textCase(nil)
+//                    .foregroundStyle(.purple)
             }
             
             Section {
@@ -66,10 +66,10 @@ public struct SyncDetailsView: View {
                 LabeledContent(String(localized: "Error", bundle: .module, comment: "iCloud sync details stat title."), value: syncModel.syncError?.localizedDescription ?? "None")
             } header: {
                 Text("Last Sync", bundle: .module, comment: "Sync details section header.")
-                    .font(.headline)
-                    .headerProminence(.increased)
-                    .textCase(nil)
-                    .foregroundStyle(.purple)
+//                    .font(.headline)
+//                    .headerProminence(.increased)
+//                    .textCase(nil)
+//                    .foregroundStyle(.purple)
             }
         }
         .navigationTitle(Text("iCloud Status", bundle: .module, comment: "The navigation title for the sync details view."))
