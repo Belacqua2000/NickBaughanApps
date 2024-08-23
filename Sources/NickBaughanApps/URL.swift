@@ -9,5 +9,6 @@ import Foundation
 
 public extension URL {
     static let developerWebsite: Self = URL(string: "https://nickbaughan.com")!
+    static let privacyPolicy: Self = URL(string: "https://nickbaughan.com/privacy-policy")!
     static let supportEmail: Self = URL(string: "mailto:support@nickbaughan.com")!
 }
