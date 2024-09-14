@@ -1,7 +1,7 @@
 import XCTest
 @testable import NickBaughanApps
 
-@available(iOS 17, *)
+@available(iOS 17, macOS 14, watchOS 11, tvOS 17, *)
 final class RatingsModelTests: XCTestCase {
     
     override class func setUp() {

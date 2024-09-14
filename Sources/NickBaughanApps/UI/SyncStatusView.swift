@@ -25,19 +25,18 @@ public struct SyncStatusView: View {
     }
     
     var labelInfo: (title: String, iconName: String)? {
-        if syncModel.syncInProgress, let description = syncModel.currentSyncDescription {
+        if syncModel.syncInProgress, let description = syncModel.lastEvent?.eventType.userDescription {
             return (description, "arrow.clockwise.icloud")
         } else if syncModel.syncError != nil {
             return (String(localized: "iCloud Sync Failed", bundle: .module, comment: "Sync status view text option."), "xmark.icloud")
-        } else if let lastSync = syncModel.lastSync {
-            let date = Date(timeIntervalSince1970: lastSync)
+        } else if let lastSyncDate = syncModel.lastEvent?.startDate {
             let format: Date.FormatStyle
-            if Calendar.current.isDateInToday(date) {
+            if Calendar.current.isDateInToday(lastSyncDate) {
                 format = .init(date: .omitted, time: .shortened, capitalizationContext: .middleOfSentence)
             } else {
                 format = .init(date: .numeric, time: .shortened, capitalizationContext: .middleOfSentence)
             }
-            return (String(localized: "Last Synced: \(date.formatted(format))", bundle: .module, comment: "Sync status view text option."), "checkmark.icloud")
+            return (String(localized: "Last Synced: \(lastSyncDate.formatted(format))", bundle: .module, comment: "Sync status view text option."), "checkmark.icloud")
         } else {
             return nil
         }
@@ -91,5 +90,5 @@ public struct SyncStatusView: View {
 @available(iOS 17.0, macOS 14, watchOS 10, tvOS 17, *)
 #Preview {
     SyncStatusView()
-        .environment(iCloudSyncModel())
+        .environment(iCloudSyncModel.shared)
 }

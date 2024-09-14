@@ -103,7 +103,7 @@
       }
     },
     "Last Sync" : {
-      "comment" : "Sync details section header.",
+      "comment" : "Sync details section header.\niCloud sync details stat title.",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -121,6 +121,7 @@
     },
     "Last Sync Date" : {
       "comment" : "iCloud sync details stat title.",
+      "extractionState" : "stale",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -188,6 +189,7 @@
       }
     },
     "No favourites" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -215,6 +217,7 @@
       }
     },
     "Star" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {

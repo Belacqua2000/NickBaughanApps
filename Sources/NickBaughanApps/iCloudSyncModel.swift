@@ -13,96 +13,112 @@ import WidgetKit
 
 @available(iOS 17.0, macOS 14, watchOS 10, tvOS 17, *)
 @Observable
+@MainActor
 public class iCloudSyncModel {
-    public init(syncInProgress: Bool = false, syncError: Error? = nil, detailsPresented: Bool = false) {
-        self.syncInProgress = syncInProgress
-        self.syncError = syncError
-        self.detailsPresented = detailsPresented
-        
+    private init() {
         iCloudUpdateTask = listenForiCloudUpdate()
+        Task {
+            await loadSyncStatus()
+        }
     }
+    
+    public static let shared: iCloudSyncModel = iCloudSyncModel()
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "iCloud Sync")
     
+    private let store = iCloudStore()
+    
     private var iCloudUpdateTask: Task<Void, Error>? = nil
     
-    var lastSync: Double? {
-        get {
-            UserDefaults.standard.double(forKey: "lastSync")
-        } 
-        set {
-            UserDefaults.standard.setValue(newValue, forKey: "lastSync")
+    func listenForiCloudUpdate() -> Task<Void, Error> {
+        return Task.detached {
+            for await notification in NotificationCenter.default.notifications(named: NSPersistentCloudKitContainer.eventChangedNotification) {
+                guard let event = notification.userInfo?[NSPersistentCloudKitContainer.eventNotificationUserInfoKey] as? NSPersistentCloudKitContainer.Event else { continue }
+                await self.updateSyncStatus(with: SyncEvent(event: event))
+            }
         }
     }
     
-    var currentSyncStart: Double? {
-        get {
-            UserDefaults.standard.double(forKey: "currentSyncStart")
+    var lastEvent: SyncEvent?
+    
+    func updateSyncStatus(with event: SyncEvent) async {
+        lastEvent = event
+        do {
+            try await store.save(event)
+        } catch {
+            logger.error("\(error.localizedDescription)")
         }
-        set {
-            UserDefaults.standard.setValue(newValue, forKey: "currentSyncStart")
+    }
+    
+    func loadSyncStatus() async {
+        do {
+            lastEvent = try await store.load()
+        } catch {
+            logger.error("\(error.localizedDescription)")
         }
     }
     
     var syncInProgress: Bool {
-        get {
-            UserDefaults.standard.bool(forKey: "syncInProgress")
+        if let lastEvent {
+            return lastEvent.endDate == nil && lastEvent.errorDescription == nil
         }
-        set {
-            UserDefaults.standard.setValue(newValue, forKey: "syncInProgress")
-        }
+        return false
     }
     
-    var currentSyncDescription: String? {
-        get {
-            UserDefaults.standard.string(forKey: "currentSyncDescription")
-        }
-        set {
-            UserDefaults.standard.setValue(newValue, forKey: "currentSyncDescription")
+    var syncStatus: String {
+        if let lastEvent {
+            if lastEvent.endDate == nil && lastEvent.errorDescription == nil {
+                return "Syncing……"
+            } else if lastEvent.succeeded {
+                return "Synced"
+            } else {
+                return "Error: \(lastEvent.errorDescription ?? "")"
+            }
+        } else {
+            return "Never Synced"
         }
     }
     
     var syncError: Error?
-//    var failureAlertPresented: Bool = false
     var detailsPresented: Bool = false
     
-    func listenForiCloudUpdate() -> Task<Void, Error> {
-        return Task {
-            for await notification in NotificationCenter.default.notifications(named: NSPersistentCloudKitContainer.eventChangedNotification) {
-                guard let event = notification.userInfo?[NSPersistentCloudKitContainer.eventNotificationUserInfoKey] as? NSPersistentCloudKitContainer.Event else { continue }
-                
-                withAnimation {
-                    logger.info("iCloud Model")
-                    logger.debug("\(event)")
-                    syncInProgress = event.endDate == nil && event.error == nil
-                    logger.debug("Sync in progress: \(event.endDate == nil && event.error == nil ? "Yes" : "No")")
-                    if let endDate = event.endDate {
-                        lastSync = endDate.timeIntervalSince1970
-                    }
-                    currentSyncStart = event.startDate.timeIntervalSince1970
-                    logger.debug("Last sync updated to: \(event.startDate.timeIntervalSince1970)")
-                    syncError = event.error
-                    
-                    if syncInProgress {
-                        currentSyncDescription = event.type.userDescription
-                    } else {
-                        currentSyncDescription = nil
-                        #if canImport(WidgetKit)
-                        WidgetCenter.shared.reloadAllTimelines()
-                        #endif
-                    }
-                    logger.debug("Current Description: \(self.currentSyncDescription ?? "NIL")")
-                    
-                    if let syncError {
-                        logger.error("Sync Error: \(syncError.localizedDescription)")
-                    }
-                }
-            }
+}
+
+struct SyncEvent: Codable, Sendable {
+    init(event: NSPersistentCloudKitContainer.Event) {
+        self.startDate = event.startDate
+        self.endDate = event.endDate
+        self.eventType = event.type
+        self.errorDescription = event.error?.localizedDescription
+        self.id = event.identifier
+        self.succeeded = event.succeeded
+    }
+    
+    var id: UUID
+    var startDate: Date
+    var endDate: Date?
+    var eventType: NSPersistentCloudKitContainer.EventType
+    var errorDescription: String?
+    var succeeded: Bool
+}
+
+actor iCloudStore {
+    let encoder = JSONEncoder()
+    let decoder = JSONDecoder()
+    func save(_ event: SyncEvent) throws {
+        let data = try encoder.encode(event)
+        UserDefaults.standard.set(data, forKey: "iCloudSyncEvent")
+    }
+    
+    func load() throws -> SyncEvent? {
+        if let data = UserDefaults.standard.data(forKey: "iCloudSyncEvent") {
+            return try decoder.decode(SyncEvent.self, from: data)
         }
+        return nil
     }
 }
 
-extension NSPersistentCloudKitContainer.EventType {
+extension NSPersistentCloudKitContainer.EventType: Codable {
     var userDescription: String {
         switch self {
         case .setup:
@@ -116,3 +132,31 @@ extension NSPersistentCloudKitContainer.EventType {
         }
     }
 }
+
+
+/*withAnimation {
+    logger.info("iCloud Model")
+    logger.debug("\(event)")
+    syncInProgress = event.endDate == nil && event.error == nil
+    logger.debug("Sync in progress: \(event.endDate == nil && event.error == nil ? "Yes" : "No")")
+    if let endDate = event.endDate {
+        lastSync = endDate.timeIntervalSince1970
+    }
+    currentSyncStart = event.startDate.timeIntervalSince1970
+    logger.debug("Last sync updated to: \(event.startDate.timeIntervalSince1970)")
+    syncError = event.error
+    
+    if syncInProgress {
+        currentSyncDescription = event.type.userDescription
+    } else {
+        currentSyncDescription = nil
+        #if canImport(WidgetKit)
+        WidgetCenter.shared.reloadAllTimelines()
+        #endif
+    }
+    logger.debug("Current Description: \(self.currentSyncDescription ?? "NIL")")
+    
+    if let syncError {
+        logger.error("Sync Error: \(syncError.localizedDescription)")
+    }
+}*/
