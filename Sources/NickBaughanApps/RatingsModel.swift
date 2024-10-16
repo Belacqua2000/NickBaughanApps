@@ -22,6 +22,7 @@ public final class RatingsModel: Sendable {
         self.minimumSignificantActionCount = minimumSignificantActionCount
         self.minimumTimeSinceFirstLaunch = minimumTimeSinceFirstLaunch
         self.minimumTimeBetweenRequests = minimumTimeBetweenRequests
+        markFirstLaunch()
     }
     
     static let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "Ratings")
@@ -36,8 +37,8 @@ public final class RatingsModel: Sendable {
     let minimumTimeSinceFirstLaunch: TimeInterval
     let minimumTimeBetweenRequests: TimeInterval
     
-    /// Set the earliest review date to 24 hours after today.
-    public func markFirstLaunch() {
+    /// Set the earliest review date.
+    private func markFirstLaunch() {
         let defaults = UserDefaults.standard
         if !defaults.bool(forKey: Self.appLaunchedPreviously) {
             defaults.set(true, forKey: Self.appLaunchedPreviously)
