@@ -40,7 +40,9 @@ public final actor RatingsModel {
     let defaults = UserDefaults.standard
     
     /// Set the earliest review date to the time set in ``init(minimumSignificantActionCount:minimumTimeSinceFirstLaunch:minimumTimeBetweenRequests:)``.
-    private func markFirstLaunch() {
+    ///
+    /// Do this as soon as the app launches.
+    public func markFirstLaunch() {
         if !defaults.bool(forKey: Self.appLaunchedPreviously) {
             defaults.set(true, forKey: Self.appLaunchedPreviously)
             Self.logger.info("App launched for the first time.")
