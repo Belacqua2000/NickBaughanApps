@@ -10,7 +10,7 @@ import Foundation
 /// An object which stores app versions, their features, and the currently viewed feature.
 ///
 /// Set this as a global constant, with all versions.
-public struct VersionManager {
+public struct VersionManager: Sendable {
     public let allVersions: [Version]
     
     public init(allVersions: [Version]) {
