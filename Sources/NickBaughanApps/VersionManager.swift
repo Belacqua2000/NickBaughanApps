@@ -13,6 +13,10 @@ import Foundation
 public struct VersionManager {
     public let allVersions: [Version]
     
+    public init(allVersions: [Version]) {
+        self.allVersions = allVersions
+    }
+    
     /// The current version, obtained from the Bundle key.
     public var currentVersion: Version? {
         let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown"

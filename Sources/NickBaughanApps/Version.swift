@@ -34,7 +34,7 @@ public struct Version: Identifiable, Hashable, Sendable, CustomStringConvertible
         self.init(majorNumber: majorNumber, minorNumber: minorNumber, thirdNumber: patchNumber)
     }
     
-    init(majorNumber: Int, minorNumber: Int, thirdNumber: Int) {
+    public init(majorNumber: Int, minorNumber: Int, thirdNumber: Int) {
         self.majorNumber = majorNumber
         self.minorNumber = minorNumber
         self.thirdNumber = thirdNumber
