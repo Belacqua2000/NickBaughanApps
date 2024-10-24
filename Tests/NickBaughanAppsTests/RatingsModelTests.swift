@@ -1,28 +1,24 @@
-import XCTest
+import Testing
+import Foundation
 @testable import NickBaughanApps
 
-@available(iOS 17, macOS 14, watchOS 11, tvOS 17, *)
-final class RatingsModelTests: XCTestCase {
+struct RatingsModelTests {
     
-    override class func setUp() {
+    init() {
         let ud = UserDefaults.standard
         RatingsModel.allKeys.forEach {
             ud.removeObject(forKey: $0)
         }
     }
     
-//    func testConditionsSet() throws {
-//        RatingsModel.markFirstLaunch()
-//        XCTAssertFalse(RatingsModel.shouldPresentReview())
-//    }
-    
-    func testShouldPresentReviewCount() throws {
+    @Test
+    func testShouldPresentReviewCount() async throws {
+        let model = RatingsModel(minimumSignificantActionCount: 5, minimumTimeSinceFirstLaunch: 84_600, minimumTimeBetweenRequests: 84_600*28)
         for _ in 0..<5 {
-            let _ = RatingsModel(minimumSignificantActionCount: 5, minimumTimeSinceFirstLaunch: 84_600, minimumTimeBetweenRequests: 84_600*28).shouldPresentReview()
+            let _ = await model.shouldPresentReview()
         }
         
         let actionCount = UserDefaults.standard.integer(forKey: RatingsModel.significantActionCountKey)
-
-        XCTAssertEqual(actionCount, 5, "Found the key \(actionCount)")
+        #expect(actionCount == 5, "Found the key \(actionCount)")
     }
 }

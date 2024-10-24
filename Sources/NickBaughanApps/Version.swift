@@ -7,13 +7,24 @@
 
 import Foundation
 
-public struct Version: Identifiable, Hashable, Sendable {
+/// A version of the app.
+public struct Version: Identifiable, Hashable, Sendable, CustomStringConvertible {
+    /// The major version number.
     let majorNumber: Int
+    /// The minor version number.
     let minorNumber: Int
+    /// The patch version number.
     let thirdNumber: Int
+    
+    /// New features which are included in this version, which can then be displayed within a user interface.
+    public let newFeatures: [NewFeature] = []
+    
     public var id: String { "\(majorNumber).\(minorNumber).\(thirdNumber)" }
     
-    public var string: String { "\(majorNumber).\(minorNumber).\(thirdNumber)" }
+    /// A user-facing description of the version.
+    ///
+    /// This is in the format ``majorNumber``.``minorNumber``.``thirdNumber``.
+    public var description: String { "\(majorNumber).\(minorNumber).\(thirdNumber)" }
     
     init(from string: String) {
         let numbers = string.split(separator: ".")
@@ -27,25 +38,6 @@ public struct Version: Identifiable, Hashable, Sendable {
         self.majorNumber = majorNumber
         self.minorNumber = minorNumber
         self.thirdNumber = thirdNumber
-    }
-    
-    public let newFeatures: [NewFeature] = []
-    
-    
-    public static var current: Version {
-        let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown"
-        return Version(from: appVersion)
-    }
-    
-    public static var lastSavedVersion: Version? {
-        get {
-            guard let data = UserDefaults.standard.data(forKey: "WhatsNewVersion") else { return nil }
-            return try? JSONDecoder().decode(Version.self, from: data)
-        } set {
-            if let data = try? JSONEncoder().encode(Version.current) {
-                UserDefaults.standard.set(data, forKey: "WhatsNewVersion")
-            }
-        }
     }
 }
 
@@ -67,15 +59,17 @@ extension Version: Comparable {
     }
 }
 
-extension Version: Codable {
-    private enum CodingKeys: CodingKey {
-        case majorNumber, minorNumber, thirdNumber
-    }
-}
-
+/// A new feature of the app.
 public struct NewFeature: Identifiable, Hashable, Sendable {
+    
+    /// The title of the new feature.
     public let title: String
+    
+    /// The description of the new feature.
     public let description: AttributedString?
-    public let image: String
-    public var id: String { "\(title)" }
+    
+    /// The SF symbol corresponding to the new feature.
+    public let iconName: String
+    
+    public let id = UUID()
 }
