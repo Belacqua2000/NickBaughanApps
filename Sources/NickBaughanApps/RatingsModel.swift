@@ -9,11 +9,12 @@ import Foundation
 import StoreKit
 import OSLog
 
-@available(iOS 17, macOS 14, watchOS 10, tvOS 17, *)
-@Observable
-public final class RatingsModel: Sendable {
+/// A way to track significant actions in the app.
+///
+/// Upon app launch, make sure you call ``markFirstLaunch()``.
+public final actor RatingsModel {
     
-    /// Create a new RatingsModel to use throughout your app.
+    /// Create a new RatingsModel to use throughout your app.  Store this as a global variable.
     ///
     /// - Parameter minimumSignificantActionCount: The minimum amount of times you wish an action to occur before prompting for a review.
     /// - Parameter minimumTimeSinceFirstLaunch: The minimum amount of time you wish to wait before prompting for a review after first launching the app.
@@ -22,7 +23,7 @@ public final class RatingsModel: Sendable {
         self.minimumSignificantActionCount = minimumSignificantActionCount
         self.minimumTimeSinceFirstLaunch = minimumTimeSinceFirstLaunch
         self.minimumTimeBetweenRequests = minimumTimeBetweenRequests
-        markFirstLaunch()
+        Task { await markFirstLaunch() }
     }
     
     static let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "Ratings")
@@ -36,17 +37,17 @@ public final class RatingsModel: Sendable {
     let minimumSignificantActionCount: Int
     let minimumTimeSinceFirstLaunch: TimeInterval
     let minimumTimeBetweenRequests: TimeInterval
+    let defaults = UserDefaults.standard
     
-    /// Set the earliest review date.
+    /// Set the earliest review date to the time set in ``init(minimumSignificantActionCount:minimumTimeSinceFirstLaunch:minimumTimeBetweenRequests:)``.
     private func markFirstLaunch() {
-        let defaults = UserDefaults.standard
         if !defaults.bool(forKey: Self.appLaunchedPreviously) {
             defaults.set(true, forKey: Self.appLaunchedPreviously)
-            Self.logger.info("App launched first time.")
+            Self.logger.info("App launched for the first time.")
             let earliestReviewDate = Date.now.addingTimeInterval(minimumTimeSinceFirstLaunch).timeIntervalSinceReferenceDate
             defaults.setValue(earliestReviewDate, forKey: Self.earliestReviewDate)
         }
-        Self.logger.info("earliest review date: \(Date(timeIntervalSinceReferenceDate: defaults.double(forKey: Self.earliestReviewDate)))")
+        Self.logger.info("earliest review date: \(Date(timeIntervalSinceReferenceDate: self.defaults.double(forKey: Self.earliestReviewDate)))")
     }
     
     /// Mark a significant action as occurring and ask for a review if criteria are met.
@@ -57,7 +58,6 @@ public final class RatingsModel: Sendable {
     /// - Returns: Whether to present a review request.
     public func shouldPresentReview() -> Bool {
         appendSignificantActionCount()
-        let defaults = UserDefaults.standard
         let earliestReviewDate = Date(timeIntervalSinceReferenceDate: defaults.double(forKey: Self.earliestReviewDate))
         let significantActionCount = defaults.integer(forKey: Self.significantActionCountKey)
         Self.logger.info("Earliest review date = \(earliestReviewDate.formatted())")
@@ -74,15 +74,14 @@ public final class RatingsModel: Sendable {
     /// Update UserDefaults with the details of the current review.
     public func reviewDidPresent() {
         Self.logger.info("Updating review condition.")
-        let defaults = UserDefaults.standard
         defaults.setValue(Date.now.addingTimeInterval(minimumTimeBetweenRequests).timeIntervalSinceReferenceDate, forKey: Self.earliestReviewDate)
     }
     
     /// Mark a significant action as occurring without asking for a review.
     public func appendSignificantActionCount() {
-        var significantActionCount = UserDefaults.standard.integer(forKey: Self.significantActionCountKey)
+        var significantActionCount = defaults.integer(forKey: Self.significantActionCountKey)
         significantActionCount += 1
         Self.logger.info("Updating action count to \(significantActionCount)")
-        UserDefaults.standard.setValue(significantActionCount, forKey: Self.significantActionCountKey)
+        defaults.setValue(significantActionCount, forKey: Self.significantActionCountKey)
     }
 }
