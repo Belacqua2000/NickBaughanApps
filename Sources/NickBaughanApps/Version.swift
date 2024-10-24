@@ -17,7 +17,7 @@ public struct Version: Identifiable, Hashable, Sendable, CustomStringConvertible
     let thirdNumber: Int
     
     /// New features which are included in this version, which can then be displayed within a user interface.
-    public let newFeatures: [NewFeature] = []
+    public let newFeatures: [NewFeature]
     
     public var id: String { "\(majorNumber).\(minorNumber).\(thirdNumber)" }
     
@@ -34,10 +34,11 @@ public struct Version: Identifiable, Hashable, Sendable, CustomStringConvertible
         self.init(majorNumber: majorNumber, minorNumber: minorNumber, thirdNumber: patchNumber)
     }
     
-    public init(majorNumber: Int, minorNumber: Int, thirdNumber: Int) {
+    public init(majorNumber: Int, minorNumber: Int, thirdNumber: Int, newFeatures: [NewFeature] = []) {
         self.majorNumber = majorNumber
         self.minorNumber = minorNumber
         self.thirdNumber = thirdNumber
+        self.newFeatures = newFeatures
     }
 }
 
@@ -61,6 +62,12 @@ extension Version: Comparable {
 
 /// A new feature of the app.
 public struct NewFeature: Identifiable, Hashable, Sendable {
+    
+    public init(title: String, description: AttributedString?, iconName: String) {
+        self.title = title
+        self.description = description
+        self.iconName = iconName
+    }
     
     /// The title of the new feature.
     public let title: String
