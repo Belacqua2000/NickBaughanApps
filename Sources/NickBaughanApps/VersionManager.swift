@@ -10,7 +10,7 @@ import Foundation
 /// An object which stores app versions, their features, and the currently viewed feature.
 ///
 /// Set this as a global constant, with all versions.
-struct VersionManager {
+public struct VersionManager {
     public let allVersions: [Version]
     
     /// The current version, obtained from the Bundle key.
