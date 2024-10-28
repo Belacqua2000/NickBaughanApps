@@ -26,7 +26,11 @@ public struct VersionManager: Sendable {
     
     /// The current version, obtained from the Bundle key.
     public var currentVersion: Version? {
-        let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown"
+        var appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown"
+        let numbers = appVersion.split(separator: ".")
+        if numbers.count == 3 {
+            appVersion.append(".0")
+        }
         return allVersions.first { $0.id == appVersion }
     }
     
