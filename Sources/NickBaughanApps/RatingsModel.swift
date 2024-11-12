@@ -52,14 +52,13 @@ public final actor RatingsModel {
         Self.logger.info("earliest review date: \(Date(timeIntervalSinceReferenceDate: self.defaults.double(forKey: Self.earliestReviewDate)))")
     }
     
-    /// Mark a significant action as occurring and ask for a review if criteria are met.
+    /// Ask for a review if criteria are met.
     ///
     /// Conditions for reviews:
     /// - Certain number of significant actions passed.
     /// - Certain amount of time passed.  1 month?
     /// - Returns: Whether to present a review request.
     public func shouldPresentReview() -> Bool {
-        appendSignificantActionCount()
         let earliestReviewDate = Date(timeIntervalSinceReferenceDate: defaults.double(forKey: Self.earliestReviewDate))
         let significantActionCount = defaults.integer(forKey: Self.significantActionCountKey)
         Self.logger.info("Earliest review date = \(earliestReviewDate.formatted())")

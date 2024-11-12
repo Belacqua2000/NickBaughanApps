@@ -15,7 +15,7 @@ struct RatingsModelTests {
     func testShouldPresentReviewCount() async throws {
         let model = RatingsModel(minimumSignificantActionCount: 5, minimumTimeSinceFirstLaunch: 84_600, minimumTimeBetweenRequests: 84_600*28)
         for _ in 0..<5 {
-            let _ = await model.shouldPresentReview()
+            await model.appendSignificantActionCount()
         }
         
         let actionCount = UserDefaults.standard.integer(forKey: RatingsModel.significantActionCountKey)
