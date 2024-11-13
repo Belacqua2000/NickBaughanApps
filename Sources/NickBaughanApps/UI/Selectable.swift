@@ -22,7 +22,7 @@ public struct Selectable: ViewModifier {
     }
 }
 
-extension View {
+public extension View {
     func selectable() -> some View {
         modifier(Selectable())
     }
