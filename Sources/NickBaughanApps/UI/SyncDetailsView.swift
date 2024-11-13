@@ -22,6 +22,7 @@ public struct SyncDetailsView: View {
                     String(localized: "Status", bundle: .module, comment: "iCloud sync details stat title."),
                     value: syncModel.syncStatus
                 )
+                .selectable()
                 if syncModel.syncInProgress, let description = syncModel.lastEvent?.eventType.userDescription {
                     LabeledContent(
                         String(localized: "Type", bundle: .module, comment: "iCloud sync details stat title."),
@@ -49,6 +50,7 @@ public struct SyncDetailsView: View {
                         let date = lastSync.startDate
                         Text(date, format: Date.FormatStyle(date: Calendar.current.isDateInToday(date) ? .omitted : .numeric, time: .shortened, capitalizationContext: .middleOfSentence))
                     }
+                    .selectable()
                     if let error = lastSync.errorDescription {
                         LabeledContent(String(localized: "Error", bundle: .module, comment: "iCloud sync details stat title."), value: error)
                     }
