@@ -19,6 +19,13 @@ public struct Version: Identifiable, Hashable, Sendable, CustomStringConvertible
     /// New features which are included in this version, which can then be displayed within a user interface.
     public let newFeatures: [NewFeature]
     
+    /// New features which are included in this version, which are compatible with the current device.
+    ///
+    /// Use this in a 'What's New' page.
+    public var newFeaturesCompatibleWithCurrentDevice: [NewFeature] {
+        newFeatures.filter { $0.supportedPlatforms.includeCurrentDevice }
+    }
+    
     public var id: String { "\(majorNumber).\(minorNumber).\(thirdNumber)" }
     
     /// A user-facing description of the version.
