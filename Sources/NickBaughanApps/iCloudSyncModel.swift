@@ -68,7 +68,7 @@ public class iCloudSyncModel {
     var syncStatus: String {
         if let lastEvent {
             if lastEvent.endDate == nil && lastEvent.errorDescription == nil {
-                return "Syncing……"
+                return "Syncing…"
             } else if lastEvent.succeeded {
                 return "Synced"
             } else {
