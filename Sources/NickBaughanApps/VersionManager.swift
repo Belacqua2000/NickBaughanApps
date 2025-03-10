@@ -34,6 +34,11 @@ public struct VersionManager: Sendable {
         return allVersions.first { $0.id == appVersion }
     }
     
+    /// The layest version, defined in allVersions.
+    public var latestVersion: Version? {
+        return allVersions.max()
+    }
+    
     let lastSavedVersionKey = "WhatsNewVersionID"
     
     /// Get the last saved version from UserDefaults.
@@ -46,7 +51,7 @@ public struct VersionManager: Sendable {
     
     /// This will save the current version as the most up-to-date version.
     public func setCurrentVersionAsLastSaved() {
-        UserDefaults.standard.set(currentVersion?.id, forKey: lastSavedVersionKey)
+        UserDefaults.standard.set(latestVersion?.id, forKey: lastSavedVersionKey)
     }
     
 }
