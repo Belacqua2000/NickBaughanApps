@@ -25,7 +25,7 @@ public struct CloseButton: ToolbarContent {
     var title: String = String(localized: "Done", bundle: .module, comment: "The title of the close button.")
     
     var placement: ToolbarItemPlacement = {
-        #if os(macOS) || os(watchOS)
+        #if os(watchOS)
         .cancellationAction
         #else
         .confirmationAction
