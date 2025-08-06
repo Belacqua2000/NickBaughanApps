@@ -9,19 +9,28 @@ import SwiftUI
 
 public struct CloseButton: ToolbarContent {
     public init() { }
-    public init(title: String) {
-        self.title = title
+    
+    public init(title: String? = nil, toolbarPlacement: ToolbarItemPlacement? = nil) {
+        if let title {
+            self.title = title
+        }
+        
+        if let toolbarPlacement = toolbarPlacement {
+            self.placement = toolbarPlacement
+        }
     }
     
     @Environment(\.dismiss) private var dismiss
+    
     var title: String = String(localized: "Done", bundle: .module, comment: "The title of the close button.")
-    var placement: ToolbarItemPlacement {
-#if os(macOS) || os(watchOS)
+    
+    var placement: ToolbarItemPlacement = {
+        #if os(macOS) || os(watchOS)
         .cancellationAction
         #else
         .confirmationAction
-#endif
-    }
+        #endif
+    }()
     
     public var body: some ToolbarContent {
         ToolbarItem(placement: placement) {
