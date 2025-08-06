@@ -15,7 +15,7 @@ public struct CloseButton: ToolbarContent {
             self.title = title
         }
         
-        if let toolbarPlacement = toolbarPlacement {
+        if let toolbarPlacement {
             self.placement = toolbarPlacement
         }
     }
@@ -43,7 +43,7 @@ public struct CloseButton: ToolbarContent {
                 #endif
             }
             .help(Text("Dismiss the current view", bundle: .module, comment: "The help descriptor for the close button."))
-            #if !os(watchOS) && !os(tvOS)
+            #if os(iOS) || os(visionOS)
             .keyboardShortcut(.cancelAction)
             .imageScale(.large)
             #endif
