@@ -40,6 +40,22 @@ public struct CloseButton: ToolbarContent {
         }
     }()
     
+    let tint: Color? = {
+        if #available(iOS 26, *) {
+            nil
+        } else {
+            .gray
+        }
+    }()
+    
+    let font: Font? = {
+        if #available(iOS 26, *) {
+            nil
+        } else {
+            .title2
+        }
+    }()
+    
     public var body: some ToolbarContent {
         ToolbarItem(placement: placement) {
             Button(action: dismiss.callAsFunction) {
@@ -58,10 +74,10 @@ public struct CloseButton: ToolbarContent {
         
             #if os(iOS)
             .symbolVariant(symbolVariant)
-            .font(.title2)
+            .font(font)
             .contentShape(.hoverEffect, .circle)
             .hoverEffect(.lift)
-            .tint(.gray)
+            .tint(tint)
             .symbolRenderingMode(.hierarchical)
             #elseif os(watchOS)
             .labelStyle(.iconOnly)
