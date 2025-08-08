@@ -32,6 +32,14 @@ public struct CloseButton: ToolbarContent {
         #endif
     }()
     
+    let symbolVariant: SymbolVariants = {
+        if #available(iOS 26, *) {
+            .none
+        } else {
+            .fill.circle
+        }
+    }()
+    
     public var body: some ToolbarContent {
         ToolbarItem(placement: placement) {
             Button(action: dismiss.callAsFunction) {
