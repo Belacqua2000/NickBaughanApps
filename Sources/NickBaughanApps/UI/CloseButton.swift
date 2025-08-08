@@ -57,7 +57,7 @@ public struct CloseButton: ToolbarContent {
             #endif
         
             #if os(iOS)
-            .symbolVariant(.fill.circle)
+            .symbolVariant(symbolVariant)
             .font(.title2)
             .contentShape(.hoverEffect, .circle)
             .hoverEffect(.lift)
