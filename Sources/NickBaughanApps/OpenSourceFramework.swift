@@ -7,14 +7,21 @@
 
 import Foundation
 
-struct OpenSourceFramework: Identifiable {
-    var id: String { title }
+public struct OpenSourceFramework: Identifiable {
+    public init(title: String, description: String, url: URL, license: License) {
+        self.title = title
+        self.description = description
+        self.url = url
+        self.license = license
+    }
+    
+    public var id: String { title }
     let title: String
     let description: String
     let url: URL
     let license: License
     
-    enum License {
+    public enum License {
         case apache20
         case mit
         case unknown(String)

@@ -6,9 +6,18 @@
 //
 
 import SwiftUI
+import DeveloperToolsSupport
 
 @available(iOS 17.0, tvOS 17.0, macOS 14.0, watchOS 10.0, *)
 public struct AboutView: View {
+    
+    public init(appTitle: String, frameworks: [OpenSourceFramework], appIcon: String) {
+        self.appTitle = appTitle
+        self.frameworks = frameworks
+        self.appIcon = .init(name: appIcon, bundle: .main)
+    }
+    
+    
     var appTitle: String
     var frameworks: [OpenSourceFramework]
     var appIcon: ImageResource
@@ -152,6 +161,6 @@ public struct AboutView: View {
 
 #Preview {
     if #available (iOS 17.0, tvOS 17.0, macOS 14.0, watchOS 10.0, *) {
-        AboutView(appTitle: "Cairns", frameworks: [], appIcon: .developerMemojiWave)
+        AboutView(appTitle: "Cairns", frameworks: [], appIcon: "")
     }
 }
