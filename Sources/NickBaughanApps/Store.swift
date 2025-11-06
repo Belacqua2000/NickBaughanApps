@@ -8,6 +8,7 @@
 import Foundation
 import OSLog
 
+@available(iOS 17.0, tvOS 17.0, macOS 14.0, watchOS 10.0, *)
 @Observable
 class Store<T: Codable & Hashable> {
     var items: Set<T> {
