@@ -24,12 +24,14 @@ public struct OpenSourceFramework: Identifiable {
     public enum License {
         case apache20
         case mit
+        case creativeCommonsBY40
         case unknown(String)
         
         var string: String {
             switch self {
             case .apache20: return "Apache License 2.0"
             case .mit: return "MIT License"
+            case .creativeCommonsBY40: return "CC BY 4.0"
             case .unknown(let string): return string
             }
         }

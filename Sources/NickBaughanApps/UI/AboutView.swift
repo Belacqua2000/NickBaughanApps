@@ -11,7 +11,7 @@ import DeveloperToolsSupport
 @available(iOS 17.0, tvOS 17.0, macOS 14.0, watchOS 10.0, *)
 public struct AboutView: View {
     
-    public init(appTitle: String, frameworks: [OpenSourceFramework], appIcon: String) {
+    public init(appTitle: String, frameworks: [OpenSourceFramework] = [], appIcon: String) {
         self.appTitle = appTitle
         self.frameworks = frameworks
         self.appIcon = .init(name: appIcon, bundle: .main)
