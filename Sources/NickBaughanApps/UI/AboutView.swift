@@ -151,7 +151,6 @@ public struct AboutView: View {
             }
             //        .focusable()
             #if !os(macOS)
-            .toolbar(content: CloseButton.init)
             .navigationTitle("About")
             #endif
             .formStyle(.grouped)
