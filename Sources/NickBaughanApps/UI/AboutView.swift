@@ -53,108 +53,106 @@ public struct AboutView: View {
     @State private var selectedImage: DeveloperImage = .heart
     
     public var body: some View {
-        CPNavigationView {
-            Form {
-                Section {
-                    VStack {
-                        Image(appIcon)
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-#if os(iOS) || os(macOS) || os(tvOS)
-                            .clipShape(.rect(cornerRadius: 20))
-#elseif os(watchOS) || os(visionOS)
-                            .clipShape(.circle)
-#endif
-                            .frame(width: 80)
-                            .accessibilityHidden(true)
-                        //                    .listRowBackground(EmptyView())
-                        Text(appTitle)
-                            .font(.system(.title, weight: .bold))
-                        Text("Designed and built with love from Scotland 🏴󠁧󠁢󠁳󠁣󠁴󠁿")
-                            .multilineTextAlignment(.center)
-                    }
-                    .accessibilityElement(children: .combine)
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .focusable()
+        Form {
+            Section {
+                VStack {
+                    Image(appIcon)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        #if os(iOS) || os(macOS) || os(tvOS)
+                        .clipShape(.rect(cornerRadius: 20))
+                        #elseif os(watchOS) || os(visionOS)
+                        .clipShape(.circle)
+                        #endif
+                        .frame(width: 80)
+                        .accessibilityHidden(true)
+                    //                    .listRowBackground(EmptyView())
+                    Text(appTitle)
+                        .font(.system(.title, weight: .bold))
+                    Text("Designed and built with love from Scotland 🏴󠁧󠁢󠁳󠁣󠁴󠁿")
+                        .multilineTextAlignment(.center)
                 }
-                
-                Section("Developer") {
-                    Button {
-                        withAnimation { self.selectedImage = self.selectedImage.nextImage() }
-                    } label: {
-                        ZStack {
-                            Circle().fill(.gray.opacity(0.5).gradient)
-                            Image(selectedImage.image)
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .padding()
-                        }
-                        .frame(height: 156)
+                .accessibilityElement(children: .combine)
+                .padding()
+                .frame(maxWidth: .infinity)
+                .focusable()
+            }
+            
+            Section("Developer") {
+                Button {
+                    withAnimation { self.selectedImage = self.selectedImage.nextImage() }
+                } label: {
+                    ZStack {
+                        Circle().fill(.gray.opacity(0.5).gradient)
+                        Image(selectedImage.image)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .padding()
                     }
-                    .frame(maxWidth: .infinity)
-                    .buttonStyle(.borderless)
-                    .listRowSeparator(.hidden)
-                    .accessibilityHidden(true)
-                    
-                    Text(
+                    .frame(height: 156)
+                }
+                .frame(maxWidth: .infinity)
+                .buttonStyle(.borderless)
+                .listRowSeparator(.hidden)
+                .accessibilityHidden(true)
+                
+                Text(
                     """
                     I am an independent app developer and have been passionate about software from a young age. Since 2019, I have been teaching myself app development, and strive to make simple and intuitive apps in my free time.
                     
                     *Nick Baughan*
                     """
-                    )
-                    .selectable()
-#if !os(tvOS)
-                    Link(destination: .developerWebsite) {
-                        Label("Get in Touch", systemImage: "hand.wave")
-                    }
-#endif
+                )
+                .selectable()
+                #if !os(tvOS)
+                Link(destination: .developerWebsite) {
+                    Label("Get in Touch", systemImage: "hand.wave")
                 }
-                
-                /* Section("Acknowledgements") {
-                 Text(
-                 """
-                 I am hugely grateful to the people below, who have informally given advice and tested this app.
-                 
-                 **Paul Baughan**
-                 """
-                 )
-                 LabeledContent("", value: "")
-                 }*/
-                if !frameworks.isEmpty {
-                    Section {
-                        ForEach(frameworks) { framework in
-                            VStack(alignment: .leading) {
-                                Text(framework.title).bold()
-                                Text(framework.license.string).font(.footnote)
-                                Text(framework.description).foregroundStyle(.secondary)
-                                Link(framework.url.host()!, destination: framework.url).font(.footnote)
-                                    .buttonStyle(.borderless)
-                                    .accessibilityLabel("\(framework.title) Website")
-                            }
-                            .accessibilityElement(children: .combine)
+                #endif
+            }
+            
+            /* Section("Acknowledgements") {
+             Text(
+             """
+             I am hugely grateful to the people below, who have informally given advice and tested this app.
+             
+             **Paul Baughan**
+             """
+             )
+             LabeledContent("", value: "")
+             }*/
+            if !frameworks.isEmpty {
+                Section {
+                    ForEach(frameworks) { framework in
+                        VStack(alignment: .leading) {
+                            Text(framework.title).bold()
+                            Text(framework.license.string).font(.footnote)
+                            Text(framework.description).foregroundStyle(.secondary)
+                            Link(framework.url.host()!, destination: framework.url).font(.footnote)
+                                .buttonStyle(.borderless)
+                                .accessibilityLabel("\(framework.title) Website")
                         }
-                    } header: {
-                        Text("Open-Source Frameworks")
-                    } footer: {
-                        Text("I'm very grateful for these tools that help to make \(appTitle) possible.")
+                        .accessibilityElement(children: .combine)
                     }
-                }
-                
-                Section("Version") {
-                    LabeledContent("Version", value: versionNumber)
-                        .selectable()
-                    LabeledContent("Build", value: buildNumber)
-                        .selectable()
+                } header: {
+                    Text("Open-Source Frameworks")
+                } footer: {
+                    Text("I'm very grateful for these tools that help to make \(appTitle) possible.")
                 }
             }
-            //        .focusable()
-            #if !os(macOS)
-            .navigationTitle("About")
-            #endif
-            .formStyle(.grouped)
+            
+            Section("Version") {
+                LabeledContent("Version", value: versionNumber)
+                    .selectable()
+                LabeledContent("Build", value: buildNumber)
+                    .selectable()
+            }
         }
+        //        .focusable()
+        #if !os(macOS)
+        .navigationTitle("About")
+        #endif
+        .formStyle(.grouped)
     }
 }
 
