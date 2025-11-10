@@ -18,8 +18,14 @@ public extension URL {
     static let privacyPolicy: Self = URL(string: "https://nickbaughan.com/privacy-policy")!
     /**
      A mailto: URL for the developer support email address.
+     
+     Use ``prefilledSupportEmail(subject:body:)`` to customise the contents of the email.
      */
     static let supportEmail: Self = URL(string: "mailto:support@nickbaughan.com")!
+    
+    
+    /// The URL to Apple's End License User Agreement.
+    static let appleEULA = URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!
     
     /**
      Returns a mailto: URL for support prefilled with diagnostic information and optional subject/body.
