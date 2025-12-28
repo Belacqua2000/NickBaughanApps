@@ -11,7 +11,7 @@ import OSLog
 @available(iOS 17.0, tvOS 17.0, macOS 14.0, watchOS 10.0, *)
 @Observable
 public class Store<T: Codable & Hashable> {
-    var items: Set<T> {
+    public var items: Set<T> {
         get {
             access(keyPath: \.items)
             return loadFromUserDefaults()
@@ -27,7 +27,7 @@ public class Store<T: Codable & Hashable> {
     
     let userDefaultsKey: String
     private let store: UserDefaults
-    private let logger: Logger// = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "Store")
+    private let logger: Logger
     
     public init(key: String, store: UserDefaults = .standard, defaultItems: Set<T> = []) {
         userDefaultsKey = key
