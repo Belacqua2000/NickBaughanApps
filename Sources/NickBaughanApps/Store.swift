@@ -10,7 +10,7 @@ import OSLog
 
 @available(iOS 17.0, tvOS 17.0, macOS 14.0, watchOS 10.0, *)
 @Observable
-class Store<T: Codable & Hashable> {
+public class Store<T: Codable & Hashable> {
     var items: Set<T> {
         get {
             access(keyPath: \.items)
@@ -29,7 +29,7 @@ class Store<T: Codable & Hashable> {
     private let store: UserDefaults
     private let logger: Logger// = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "Store")
     
-    init(key: String, store: UserDefaults = .standard, defaultItems: Set<T> = []) {
+    public init(key: String, store: UserDefaults = .standard, defaultItems: Set<T> = []) {
         userDefaultsKey = key
         self.store = store
         logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "Store for \(key)")
