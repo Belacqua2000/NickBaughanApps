@@ -21,9 +21,20 @@ public extension Labelable {
         case .name(let title): Label(self.title, image: title)
         }
     }
+    
+    var imageName: String {
+        image.imageName
+    }
 }
 
 public enum LabelableImage {
     case systemName(String)
     case name(String)
+    
+    var imageName: String {
+        switch self {
+        case .systemName(let title): title
+        case .name(let title): title
+        }
+    }
 }
