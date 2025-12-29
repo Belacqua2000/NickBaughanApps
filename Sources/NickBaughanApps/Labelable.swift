@@ -33,6 +33,10 @@ public extension Labelable {
     var imageName: String? {
         image.imageName
     }
+    
+    var imageView: some View {
+        image.image
+    }
 }
 
 public enum LabelableImage {
