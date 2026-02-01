@@ -5,31 +5,57 @@
 //  Created by Nick Baughan on 27/05/2025.
 //
 
+/// A view presenting detailed information about the app, including app metadata,
+/// developer information, acknowledgements, and open-source frameworks used.
+/// Supports iOS 17.0+, tvOS 17.0+, macOS 14.0+, and watchOS 10.0+.
 import SwiftUI
 import DeveloperToolsSupport
 
 @available(iOS 17.0, tvOS 17.0, macOS 14.0, watchOS 10.0, *)
 public struct AboutView: View {
     
+    /// The title of the app, expected to be a localized string.
+    var appTitle: String
+    
+    /// A collection of open-source frameworks used within the app.
+    var frameworks: [OpenSourceFramework]
+    
+    /// The app icon image resource displayed in the about view.
+    var appIcon: ImageResource
+    
+    /// The build number of the app, retrieved from the app bundle.
+    let buildNumber: String = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown"
+    
+    /// The version number of the app, retrieved from the app bundle.
+    let versionNumber: String = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown"
+    
+    /// Creates an AboutView displaying information about the app.
+    ///
+    /// - Parameters:
+    ///   - appTitle: The localized name of the app to display.
+    ///   - frameworks: An array of open-source frameworks to acknowledge.
+    ///   - appIcon: The name of the app icon asset to display.
+    ///
+    /// - Warning: The `appTitle` string must already be localized before passing in.
     public init(appTitle: String, frameworks: [OpenSourceFramework] = [], appIcon: String) {
         self.appTitle = appTitle
         self.frameworks = frameworks
         self.appIcon = .init(name: appIcon, bundle: .main)
     }
     
-    
-    var appTitle: String
-    var frameworks: [OpenSourceFramework]
-    var appIcon: ImageResource
-    
-    let buildNumber: String = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown"
-    let versionNumber: String = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown"
-    
+    /// An enumeration describing the developer's memoji images shown in the about view.
     @available(iOS 17.0, tvOS 17.0, macOS 14.0, watchOS 10.0, *)
     enum DeveloperImage: Identifiable {
-        case wave, mac, heart
+        /// The waving memoji image.
+        case wave
+        /// The macbook memoji image.
+        case mac
+        /// The heart memoji image.
+        case heart
+        
         var id: Self { self }
         
+        /// The image resource associated with each developer image case.
         var image: ImageResource {
             switch self {
             case .wave: .developerMemojiWave
@@ -38,6 +64,7 @@ public struct AboutView: View {
             }
         }
         
+        /// Returns the next developer image in sequence.
         func nextImage() -> Self {
             switch self {
             case .wave:
@@ -50,10 +77,14 @@ public struct AboutView: View {
         }
     }
     
+    /// The currently selected developer memoji image shown in the view.
     @State private var selectedImage: DeveloperImage = .heart
     
+    /// The main view body presenting app info, developer details, acknowledgements,
+    /// frameworks, and version data in a grouped form.
     public var body: some View {
         Form {
+            /// Section displaying app icon, title, and a short tagline.
             Section {
                 VStack {
                     Image(appIcon)
@@ -70,14 +101,15 @@ public struct AboutView: View {
                     Text(appTitle)
                         .font(.system(.title, weight: .bold))
                     Text("Designed and built with love from Scotland 🏴󠁧󠁢󠁳󠁣󠁴󠁿")
-                        .multilineTextAlignment(.center)
                 }
+                .multilineTextAlignment(.center)
                 .accessibilityElement(children: .combine)
                 .padding()
                 .frame(maxWidth: .infinity)
                 .focusable()
             }
             
+            /// Section presenting developer information including an interactive image, biography text, and a contact link.
             Section("Developer") {
                 Button {
                     withAnimation { self.selectedImage = self.selectedImage.nextImage() }
@@ -111,16 +143,7 @@ public struct AboutView: View {
                 #endif
             }
             
-            /* Section("Acknowledgements") {
-             Text(
-             """
-             I am hugely grateful to the people below, who have informally given advice and tested this app.
-             
-             **Paul Baughan**
-             """
-             )
-             LabeledContent("", value: "")
-             }*/
+            /// Section listing open-source frameworks utilized by the app, if any.
             if !frameworks.isEmpty {
                 Section {
                     ForEach(frameworks) { framework in
@@ -141,6 +164,7 @@ public struct AboutView: View {
                 }
             }
             
+            /// Section displaying version and build number information.
             Section("Version") {
                 LabeledContent("Version", value: versionNumber)
                     .selectable()
@@ -156,6 +180,7 @@ public struct AboutView: View {
     }
 }
 
+/// SwiftUI preview provider for AboutView, used for design and testing in Xcode previews.
 #Preview {
     if #available (iOS 17.0, tvOS 17.0, macOS 14.0, watchOS 10.0, *) {
         AboutView(appTitle: "Cairns", frameworks: [], appIcon: "")
