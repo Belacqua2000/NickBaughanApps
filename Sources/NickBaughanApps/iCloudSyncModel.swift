@@ -118,7 +118,7 @@ actor iCloudStore {
     }
 }
 
-extension NSPersistentCloudKitContainer.EventType: Codable {
+extension NSPersistentCloudKitContainer.EventType: @retroactive Codable {
     var userDescription: String {
         switch self {
         case .setup:
