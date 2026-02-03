@@ -27,6 +27,9 @@ public extension URL {
     /// The URL to Apple's End License User Agreement.
     static let appleEULA = URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!
     
+    /// The URL to Apple's accessibility website.
+    static let appleAccessibilityInfo = URL(string: "https://support.apple.com/en-gb/guide/iphone/iph3e2e4367/ios")!
+    
     /**
      Returns a mailto: URL for support prefilled with diagnostic information and optional subject/body.
 
