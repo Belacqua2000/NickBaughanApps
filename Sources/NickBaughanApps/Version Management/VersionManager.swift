@@ -54,7 +54,7 @@ public struct VersionManager: Sendable {
     }
 }
 
-extension EnvironmentValues {
+public extension EnvironmentValues {
     @Entry var versionManager: VersionManager?
 }
 
