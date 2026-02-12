@@ -6,10 +6,9 @@
 //
 
 import Foundation
+import SwiftUI
 
 /// An object which stores app versions, their features, and the currently viewed feature.
-///
-/// Set this as a global constant, with all versions.
 public struct VersionManager: Sendable {
     public let allVersions: [Version]
     
@@ -20,8 +19,8 @@ public struct VersionManager: Sendable {
             .reversed()
     }
     
-    public init(allVersions: [Version]) {
-        self.allVersions = allVersions
+    public init(@VersionBuilder _ builder: () -> [Version]) {
+        self.allVersions = builder()
     }
     
     /// The current version, obtained from the Bundle key.
@@ -34,7 +33,7 @@ public struct VersionManager: Sendable {
         return allVersions.first { $0.id == appVersion }
     }
     
-    /// The layest version, defined in allVersions.
+    /// The latest version, defined in allVersions.
     public var latestVersion: Version? {
         return allVersions.max()
     }
@@ -53,5 +52,16 @@ public struct VersionManager: Sendable {
     public func setCurrentVersionAsLastSaved() {
         UserDefaults.standard.set(latestVersion?.id, forKey: lastSavedVersionKey)
     }
-    
+}
+
+extension EnvironmentValues {
+    @Entry var versionManager: VersionManager?
+}
+
+/// Scene extension for adding version management to your App
+extension Scene {
+    public func versionManager(@VersionBuilder _ builder: @escaping () -> [Version]) -> some Scene {
+        let manager = VersionManager(builder)
+        return self.environment(\.versionManager, manager)
+    }
 }

@@ -1,6 +1,6 @@
 //
 //  Version.swift
-//  
+//
 //
 //  Created by Nick Baughan on 28/12/2022.
 //
@@ -11,8 +11,10 @@ import Foundation
 public struct Version: Identifiable, Hashable, Sendable, CustomStringConvertible {
     /// The major version number.
     let majorNumber: Int
+    
     /// The minor version number.
     let minorNumber: Int
+    
     /// The patch version number.
     let thirdNumber: Int
     
@@ -41,11 +43,11 @@ public struct Version: Identifiable, Hashable, Sendable, CustomStringConvertible
         self.init(majorNumber: majorNumber, minorNumber: minorNumber, thirdNumber: patchNumber)
     }
     
-    public init(majorNumber: Int, minorNumber: Int, thirdNumber: Int, newFeatures: [NewFeature] = []) {
+    public init(majorNumber: Int, minorNumber: Int, thirdNumber: Int, @NewFeatureBuilder newFeatures: () -> [NewFeature] = { [] }) {
         self.majorNumber = majorNumber
         self.minorNumber = minorNumber
         self.thirdNumber = thirdNumber
-        self.newFeatures = newFeatures
+        self.newFeatures = newFeatures()
     }
 }
 
@@ -65,66 +67,4 @@ extension Version: Comparable {
             return lhs.thirdNumber < rhs.thirdNumber
         }
     }
-}
-
-public struct Platforms: OptionSet, Sendable, Hashable {
-    public var rawValue: Int
-    
-    public init(rawValue: Int) {
-        self.rawValue = rawValue
-    }
-    
-    public static let macOS = Platforms(rawValue: 1 << 0)
-    public static let iOS = Platforms(rawValue: 1 << 1)
-    public static let tvOS = Platforms(rawValue: 1 << 2)
-    public static let watchOS = Platforms(rawValue: 1 << 3)
-    public static let visionOS = Platforms(rawValue: 1 << 4)
-    
-    /// All of the current Apple platforms.
-    public static let all: Platforms = [.macOS, .iOS, .tvOS, .watchOS, .visionOS]
-    public static let supportsTouch: Platforms = [.iOS, .watchOS, .visionOS]
-    public static let supportsKeyboard: Platforms = [.iOS, .macOS, .visionOS]
-    public static let supportsPointer: Platforms = [.iOS, .macOS, .visionOS]
-    
-    /// Whether the platforms include the current device.
-    public var includeCurrentDevice: Bool {
-        #if os(macOS)
-        self.contains(.macOS)
-        #elseif os(iOS)
-        self.contains(.iOS)
-        #elseif os(tvOS)
-        self.contains(.tvOS)
-        #elseif os(visionOS)
-        self.contains(.visionOS)
-        #elseif os(watchOS)
-        self.contains(.watchOS)
-        #else
-        false
-        #endif
-    }
-}
-
-/// A new feature of the app.
-public struct NewFeature: Identifiable, Hashable, Sendable {
-    
-    public init(title: String, description: AttributedString?, iconName: String, supportedPlatforms: Platforms = .all) {
-        self.title = title
-        self.description = description
-        self.iconName = iconName
-        self.supportedPlatforms = supportedPlatforms
-    }
-    
-    /// The title of the new feature.
-    public let title: String
-    
-    /// The description of the new feature.
-    public let description: AttributedString?
-    
-    /// The SF symbol corresponding to the new feature.
-    public let iconName: String
-    
-    /// The platforms the feature is available on.
-    public let supportedPlatforms: Platforms
-    
-    public let id = UUID()
 }
