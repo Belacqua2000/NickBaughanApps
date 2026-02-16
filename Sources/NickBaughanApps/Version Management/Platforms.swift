@@ -21,8 +21,20 @@ public struct Platforms: OptionSet, Sendable, Hashable {
     
     /// All of the current Apple platforms.
     public static let all: Platforms = [.macOS, .iOS, .tvOS, .watchOS, .visionOS]
+    
+    /// Devices which support touch.
+    ///
+    /// This includes ``iOS``, ``watchOS``, and ``visionOS``.
     public static let supportsTouch: Platforms = [.iOS, .watchOS, .visionOS]
+    
+    /// Devices which support touch.
+    ///
+    /// This includes ``iOS``, ``macOS``, and ``visionOS``.
     public static let supportsKeyboard: Platforms = [.iOS, .macOS, .visionOS]
+    
+    /// Devices which support touch.
+    ///
+    /// This includes ``iOS``, ``macOS``, and ``visionOS``.
     public static let supportsPointer: Platforms = [.iOS, .macOS, .visionOS]
     
     /// Whether the platforms include the current device.
