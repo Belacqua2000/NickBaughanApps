@@ -21,23 +21,30 @@ import SwiftUI
 ///
 /// You can customize the appearance of each section header by providing a `sectionHeader` closure
 /// when initializing the view.
-public struct WhatsNewView: View {
+public struct WhatsNewView<SectionHeader: View>: View {
     
-    /// Creates a What's New view.
+    /// Creates a What's New view with a customizable section header view.
     /// - Parameters:
     ///   - appName: The display name of your app, used in the introductory text.
-    ///   - sectionHeader: A closure that receives the default section header text (for example, "Version 1.2.3")
-    ///     and returns a modified `Text`. Use this to style the header; defaults to the identity closure.
-    ///
+    ///   - sectionHeader: A view builder that receives the default section header text (for example, "Version 1.2.3")
+    ///     and returns a customized view to display as the section header.
+    /// - Note: Use this initializer when you want the header to be something other than plain `Text`,
+    ///   or when you want to wrap `Text` with additional layout.
     /// - Example:
     ///   ```swift
     ///   WhatsNewView(appName: "MyApp") { header in
     ///       header.font(.headline).foregroundStyle(.tint)
     ///   }
     ///   ```
-    public init(appName: String, sectionHeader: @escaping (_ header: Text) -> Text = { $0 }) {
+    public init(appName: String, @ViewBuilder sectionHeader: @escaping (_ header: Text) -> SectionHeader) {
         self.appName = appName
         self.sectionHeader = sectionHeader
+    }
+
+    /// Creates a What's New view with default `Text` headers.
+    /// Use this convenience initializer when you only need the plain header text.
+    public init(appName: String) where SectionHeader == Text {
+        self.init(appName: appName) { $0 }
     }
     
     @Environment(\.versionManager) private var versionManager
@@ -51,8 +58,8 @@ public struct WhatsNewView: View {
     }
     
     var appName: String
-    /// A closure that styles the section header text. Defaults to the identity closure.
-    var sectionHeader: (Text) -> Text
+    /// A builder that produces the section header view from the default header `Text`.
+    var sectionHeader: (Text) -> SectionHeader
     
     @State private var selectedItem: NewFeature.ID?
     
@@ -123,3 +130,4 @@ struct FeatureLabel: View {
         }
     }
 }
+
