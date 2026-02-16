@@ -5,7 +5,6 @@
 //  Created by Nick Baughan on 12/02/2026.
 //
 
-
 //
 //  WhatsNew.swift
 //  Ailsa
@@ -15,9 +14,30 @@
 
 import SwiftUI
 
+/// A view that presents What's New information grouped by app version.
+///
+/// The view reads version information from the environment and lists features for each version.
+/// If there are unseen versions, those are shown; otherwise, the most recent versions are listed.
+///
+/// You can customize the appearance of each section header by providing a `sectionHeader` closure
+/// when initializing the view.
 public struct WhatsNewView: View {
-    public init(appName: String) {
+    
+    /// Creates a What's New view.
+    /// - Parameters:
+    ///   - appName: The display name of your app, used in the introductory text.
+    ///   - sectionHeader: A closure that receives the default section header text (for example, "Version 1.2.3")
+    ///     and returns a modified `Text`. Use this to style the header; defaults to the identity closure.
+    ///
+    /// - Example:
+    ///   ```swift
+    ///   WhatsNewView(appName: "MyApp") { header in
+    ///       header.font(.headline).foregroundStyle(.tint)
+    ///   }
+    ///   ```
+    public init(appName: String, sectionHeader: @escaping (_ header: Text) -> Text = { $0 }) {
         self.appName = appName
+        self.sectionHeader = sectionHeader
     }
     
     @Environment(\.versionManager) private var versionManager
@@ -31,6 +51,8 @@ public struct WhatsNewView: View {
     }
     
     var appName: String
+    /// A closure that styles the section header text. Defaults to the identity closure.
+    var sectionHeader: (Text) -> Text
     
     @State private var selectedItem: NewFeature.ID?
     
@@ -55,11 +77,13 @@ public struct WhatsNewView: View {
                 .frame(maxWidth: .infinity)
                 
                 ForEach(versions) { version in
-                    Section("Version \(version.description)") {
+                    Section {
                         ForEach(version.newFeaturesCompatibleWithCurrentDevice) { feature in
                             FeatureLabel(feature: feature)
                                 .selectable()
                         }
+                    } header: {
+                        sectionHeader(Text("Version \(version.description)"))
                     }
                 }
             }
@@ -94,6 +118,8 @@ struct FeatureLabel: View {
 
 #Preview {
     CPNavigationView {
-        WhatsNewView(appName: "Test")
+        WhatsNewView(appName: "Test") { text in
+            text.font(.headline)
+        }
     }
 }
