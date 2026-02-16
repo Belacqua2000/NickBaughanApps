@@ -12,7 +12,7 @@ import SwiftUI
 import DeveloperToolsSupport
 
 @available(iOS 17.0, tvOS 17.0, macOS 14.0, watchOS 10.0, *)
-public struct AboutView: View {
+public struct AboutView<SectionHeader: View>: View {
     
     /// The title of the app, expected to be a localized string.
     var appTitle: String
@@ -23,24 +23,33 @@ public struct AboutView: View {
     /// The app icon image resource displayed in the about view.
     var appIcon: ImageResource
     
+    /// A builder that produces the section header view from the default header `Text`.
+    var sectionHeader: (Text) -> SectionHeader
+    
     /// The build number of the app, retrieved from the app bundle.
     let buildNumber: String = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown"
     
     /// The version number of the app, retrieved from the app bundle.
     let versionNumber: String = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown"
     
-    /// Creates an AboutView displaying information about the app.
+    /// Creates an AboutView displaying information about the app with a customizable section header view.
     ///
     /// - Parameters:
     ///   - appTitle: The localized name of the app to display.
     ///   - frameworks: An array of open-source frameworks to acknowledge.
     ///   - appIcon: The name of the app icon asset to display.
-    ///
-    /// - Warning: The `appTitle` string must already be localized before passing in.
-    public init(appTitle: String, frameworks: [OpenSourceFramework] = [], appIcon: String) {
+    ///   - sectionHeader: A view builder that receives the default section header text (for example, "Version")
+    ///     and returns a customized view to display as the section header.
+    public init(appTitle: String, frameworks: [OpenSourceFramework] = [], appIcon: String, @ViewBuilder sectionHeader: @escaping (_ header: Text) -> SectionHeader) {
         self.appTitle = appTitle
         self.frameworks = frameworks
         self.appIcon = .init(name: appIcon, bundle: .main)
+        self.sectionHeader = sectionHeader
+    }
+
+    /// Creates an AboutView with default `Text` section headers.
+    public init(appTitle: String, frameworks: [OpenSourceFramework] = [], appIcon: String) where SectionHeader == Text {
+        self.init(appTitle: appTitle, frameworks: frameworks, appIcon: appIcon) { $0 }
     }
     
     /// An enumeration describing the developer's memoji images shown in the about view.
@@ -100,7 +109,7 @@ public struct AboutView: View {
                     //                    .listRowBackground(EmptyView())
                     Text(appTitle)
                         .font(.system(.title, weight: .bold))
-                    Text("Designed and built with love from Scotland 🏴󠁧󠁢󠁳󠁣󠁴󠁿")
+                    Text("Designed and built with love from Scotland 🏴")
                 }
                 .multilineTextAlignment(.center)
                 .accessibilityElement(children: .combine)
@@ -110,7 +119,7 @@ public struct AboutView: View {
             }
             
             /// Section presenting developer information including an interactive image, biography text, and a contact link.
-            Section("Developer") {
+            Section {
                 Button {
                     withAnimation { self.selectedImage = self.selectedImage.nextImage() }
                 } label: {
@@ -141,6 +150,8 @@ public struct AboutView: View {
                     Label("Get in Touch", systemImage: "hand.wave")
                 }
                 #endif
+            } header: {
+                sectionHeader(Text("Developer"))
             }
             
             /// Section listing open-source frameworks utilized by the app, if any.
@@ -158,18 +169,20 @@ public struct AboutView: View {
                         .accessibilityElement(children: .combine)
                     }
                 } header: {
-                    Text("Open-Source Frameworks")
+                    sectionHeader(Text("Open-Source Frameworks"))
                 } footer: {
                     Text("I'm very grateful for these tools that help to make \(appTitle) possible.")
                 }
             }
             
             /// Section displaying version and build number information.
-            Section("Version") {
+            Section {
                 LabeledContent("Version", value: versionNumber)
                     .selectable()
                 LabeledContent("Build", value: buildNumber)
                     .selectable()
+            } header: {
+                sectionHeader(Text("Version"))
             }
         }
         //        .focusable()
