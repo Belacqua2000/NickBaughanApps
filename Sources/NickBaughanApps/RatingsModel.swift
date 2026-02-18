@@ -12,7 +12,8 @@ import OSLog
 /// A way to track significant actions in the app.
 ///
 /// Upon app launch, make sure you call ``markFirstLaunch()``.
-public final actor RatingsModel {
+@MainActor
+public final class RatingsModel {
     
     /// Create a new RatingsModel to use throughout your app.  Store this as a global variable.
     ///
@@ -23,7 +24,7 @@ public final actor RatingsModel {
         self.minimumSignificantActionCount = minimumSignificantActionCount
         self.minimumTimeSinceFirstLaunch = minimumTimeSinceFirstLaunch
         self.minimumTimeBetweenRequests = minimumTimeBetweenRequests
-        Task { await markFirstLaunch() }
+        self.markFirstLaunch()
     }
     
     static let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "Ratings")
@@ -58,6 +59,8 @@ public final actor RatingsModel {
     /// - Certain number of significant actions passed.
     /// - Certain amount of time passed.  1 month?
     /// - Returns: Whether to present a review request.
+    ///
+    /// - Note: If this method returns `true` and you present a review request, be sure to call ``reviewDidPresent()`` immediately after the request is made to update the next eligible review date.
     public func shouldPresentReview() -> Bool {
         let earliestReviewDate = Date(timeIntervalSinceReferenceDate: defaults.double(forKey: Self.earliestReviewDate))
         let significantActionCount = defaults.integer(forKey: Self.significantActionCountKey)
@@ -79,10 +82,11 @@ public final actor RatingsModel {
     }
     
     /// Mark a significant action as occurring without asking for a review.
-    public func appendSignificantActionCount() {
+    public func appendSignificantActionCount(_ count: Int = 1) {
         var significantActionCount = defaults.integer(forKey: Self.significantActionCountKey)
-        significantActionCount += 1
+        significantActionCount += count
         Self.logger.info("Updating action count to \(significantActionCount)")
         defaults.setValue(significantActionCount, forKey: Self.significantActionCountKey)
     }
 }
+
