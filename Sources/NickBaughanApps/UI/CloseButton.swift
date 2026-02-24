@@ -36,7 +36,7 @@ public struct CloseButton: CustomizableToolbarContent {
     public var body: some CustomizableToolbarContent {
         if isPresented {
             if #available(iOS 26.0, macOS 26.0, watchOS 26.0, tvOS 26.0, visionOS 26.0, *) {
-                ToolbarItem(id: "Close") {
+                ToolbarItem(id: "Close", placement: placement) {
                     Button(role: .close, action: dismiss.callAsFunction)
                 }
             } else {
