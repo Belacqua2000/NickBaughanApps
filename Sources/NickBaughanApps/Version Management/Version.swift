@@ -35,6 +35,11 @@ public struct Version: Identifiable, Hashable, Sendable, CustomStringConvertible
     /// This is in the format ``majorNumber``.``minorNumber``.``thirdNumber``.
     public var description: String { "\(majorNumber).\(minorNumber).\(thirdNumber)" }
     
+    /// A user-facing description of the version.
+    ///
+    /// This is in the format ``majorNumber``.``minorNumber``.``thirdNumber`` or ``majorNumber``.``minorNumber``.
+    public var minimalDescription: String { thirdNumber == 0 ? "\(majorNumber).\(minorNumber)" : description }
+    
     init(from string: String) {
         let numbers = string.split(separator: ".")
         let majorNumber = Int(numbers[0]) ?? 1

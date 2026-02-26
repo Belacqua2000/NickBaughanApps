@@ -90,7 +90,7 @@ public struct WhatsNewView<SectionHeader: View>: View {
                                 .selectable()
                         }
                     } header: {
-                        sectionHeader(Text("Version \(version.description)"))
+                        sectionHeader(Text("Version \(version.minimalDescription)"))
                     }
                 }
             }
