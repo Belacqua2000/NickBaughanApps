@@ -23,12 +23,21 @@ public extension URL {
      */
     static let supportEmail: Self = URL(string: "mailto:support@nickbaughan.com")!
     
-    
     /// The URL to Apple's End License User Agreement.
     static let appleEULA = URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!
     
     /// The URL to Apple's accessibility website.
     static let appleAccessibilityInfo = URL(string: "https://support.apple.com/en-gb/guide/iphone/iph3e2e4367/ios")!
+    
+    /// The URL which opens Apple Health.
+    static let openAppleHealth: URL = URL(string: "x-apple-health://")!
+    
+    /// The URL to write a review on the App Store.
+    /// - Parameter appStoreURL: The base App Store URL.
+    /// - Returns: A URL which loads the App Store review page.
+    static func writeAppStoreReview(for appStoreURL: URL) -> Self {
+        appStoreURL.appending(queryItems: [URLQueryItem(name: "action", value: "write-review")])
+    }
     
     /**
      Returns a mailto: URL for support prefilled with diagnostic information and optional subject/body.
