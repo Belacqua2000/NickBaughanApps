@@ -28,8 +28,10 @@ public struct CloseButton: CustomizableToolbarContent {
     var placement: ToolbarItemPlacement = {
         #if os(watchOS)
         .cancellationAction
-        #else
+        #elseif os(macOS)
         .confirmationAction
+        #else
+        .automatic
         #endif
     }()
     
