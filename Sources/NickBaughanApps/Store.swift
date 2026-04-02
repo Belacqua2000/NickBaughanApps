@@ -10,7 +10,7 @@ import OSLog
 
 @available(iOS 17.0, tvOS 17.0, macOS 14.0, watchOS 10.0, *)
 @Observable
-@propertyWrapper
+//@propertyWrapper
 public class Store<T: Codable & Hashable> {
     
     public var wrappedValue: Set<T> {
@@ -24,6 +24,8 @@ public class Store<T: Codable & Hashable> {
             }
         }
     }
+    
+    public var projectedValue: Set<T> { wrappedValue }
     
     let userDefaultsKey: String
     private let store: UserDefaults
