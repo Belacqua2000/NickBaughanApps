@@ -5,22 +5,22 @@
 //  Created by Nick Baughan on 04/11/2025.
 //
 
-import Foundation
+import Observation
 import OSLog
 
 @available(iOS 17.0, tvOS 17.0, macOS 14.0, watchOS 10.0, *)
 @Observable
+@propertyWrapper
 public class Store<T: Codable & Hashable> {
-    public var items: Set<T> {
+    
+    public var wrappedValue: Set<T> {
         get {
-            access(keyPath: \.items)
+            access(keyPath: \.wrappedValue)
             return loadFromUserDefaults()
         }
-        set(newItems) {
-            withMutation (keyPath: \.items) {
-//                withAnimation {
-                    saveToUserDefaults(newItems)
-//                }
+        set {
+            withMutation(keyPath: \.wrappedValue) {
+                saveToUserDefaults(newValue)
             }
         }
     }
@@ -34,7 +34,7 @@ public class Store<T: Codable & Hashable> {
         self.store = store
         logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "Store for \(key)")
         if store.data(forKey: key) == nil {
-            items = defaultItems
+            wrappedValue = defaultItems
         }
     }
     
