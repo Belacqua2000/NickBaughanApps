@@ -10,16 +10,16 @@ import Foundation
 /// A version of the app.
 public struct Version: Identifiable, Hashable, Sendable, CustomStringConvertible {
     /// The major version number.
-    let majorNumber: Int
+    public let majorNumber: Int
     
     /// The minor version number.
-    let minorNumber: Int
+    public let minorNumber: Int
     
     /// The patch version number.
-    let thirdNumber: Int
+    public let thirdNumber: Int
     
     /// The date the version was released.
-    let releaseDate: Date?
+    public let releaseDate: Date?
     
     /// New features which are included in this version, which can then be displayed within a user interface.
     public let newFeatures: [NewFeature]
