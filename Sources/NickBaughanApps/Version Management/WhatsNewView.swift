@@ -36,15 +36,18 @@ public struct WhatsNewView<SectionHeader: View>: View {
     ///       header.font(.headline).foregroundStyle(.tint)
     ///   }
     ///   ```
-    public init(appName: String, @ViewBuilder sectionHeader: @escaping (_ header: Text) -> SectionHeader) {
+    public init(appName: String, dateStyle: Date.FormatStyle? = nil, @ViewBuilder sectionHeader: @escaping (_ version: Version) -> SectionHeader) {
         self.appName = appName
+        self.dateStyle = dateStyle
         self.sectionHeader = sectionHeader
     }
 
     /// Creates a What's New view with default `Text` headers.
     /// Use this convenience initializer when you only need the plain header text.
     public init(appName: String) where SectionHeader == Text {
-        self.init(appName: appName) { $0 }
+        self.init(appName: appName) { version in
+            Text(version.minimalDescription)
+        }
     }
     
     @Environment(\.versionManager) private var versionManager
@@ -58,8 +61,9 @@ public struct WhatsNewView<SectionHeader: View>: View {
     }
     
     var appName: String
+    var dateStyle: Date.FormatStyle?
     /// A builder that produces the section header view from the default header `Text`.
-    var sectionHeader: (Text) -> SectionHeader
+    var sectionHeader: (Version) -> SectionHeader
     
     @State private var selectedItem: NewFeature.ID?
     
@@ -90,7 +94,7 @@ public struct WhatsNewView<SectionHeader: View>: View {
                                 .selectable()
                         }
                     } header: {
-                        sectionHeader(Text("Version \(version.minimalDescription)"))
+                        sectionHeader(version)
                     }
                 }
             }
@@ -125,8 +129,11 @@ struct FeatureLabel: View {
 
 #Preview {
     CPNavigationView {
-        WhatsNewView(appName: "Test") { text in
-            text.font(.headline)
+        WhatsNewView(appName: "Test") { version in
+            HStack(alignment: .firstTextBaseline) {
+                Text("\(version.minimalDescription)")
+                Spacer()
+            }
         }
     }
 }

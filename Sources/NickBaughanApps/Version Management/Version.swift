@@ -18,6 +18,9 @@ public struct Version: Identifiable, Hashable, Sendable, CustomStringConvertible
     /// The patch version number.
     let thirdNumber: Int
     
+    /// The date the version was released.
+    let releaseDate: Date?
+    
     /// New features which are included in this version, which can then be displayed within a user interface.
     public let newFeatures: [NewFeature]
     
@@ -48,10 +51,11 @@ public struct Version: Identifiable, Hashable, Sendable, CustomStringConvertible
         self.init(majorNumber: majorNumber, minorNumber: minorNumber, thirdNumber: patchNumber)
     }
     
-    public init(majorNumber: Int, minorNumber: Int, thirdNumber: Int, @NewFeatureBuilder newFeatures: () -> [NewFeature] = { [] }) {
+    public init(majorNumber: Int, minorNumber: Int, thirdNumber: Int, releaseDate: Date? = nil, @NewFeatureBuilder newFeatures: () -> [NewFeature] = { [] }) {
         self.majorNumber = majorNumber
         self.minorNumber = minorNumber
         self.thirdNumber = thirdNumber
+        self.releaseDate = releaseDate
         self.newFeatures = newFeatures()
     }
 }
