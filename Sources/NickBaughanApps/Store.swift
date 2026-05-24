@@ -10,10 +10,10 @@ import OSLog
 
 @available(iOS 17.0, tvOS 17.0, macOS 14.0, watchOS 10.0, *)
 @Observable
-//@propertyWrapper
-public class Store<T: Codable & Hashable> {
+@propertyWrapper
+public class Store<Item: Codable> {
     
-    public var wrappedValue: Set<T> {
+    public var wrappedValue: Item {
         get {
             access(keyPath: \.wrappedValue)
             return loadFromUserDefaults()
@@ -25,40 +25,47 @@ public class Store<T: Codable & Hashable> {
         }
     }
     
-    public var projectedValue: Set<T> { wrappedValue }
+    public var projectedValue: Item { wrappedValue }
     
     let userDefaultsKey: String
     private let store: UserDefaults
     private let logger: Logger
+    private let defaultValue: Item
     
-    public init(key: String, store: UserDefaults = .standard, defaultItems: Set<T> = []) {
+    public init(wrappedValue defaultValue: Item, key: String, store: UserDefaults = .standard) {
         userDefaultsKey = key
         self.store = store
+        self.defaultValue = defaultValue
         logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "Store for \(key)")
-        if store.data(forKey: key) == nil {
-            wrappedValue = defaultItems
-        }
     }
     
-    private func saveToUserDefaults(_ items: Set<T>) {
-        logger.debug("Attempting to save: \(items.description)")
+    private func saveToUserDefaults(_ item: Item) {
+        if let item = item as? CustomStringConvertible {
+            logger.debug("Attempting to save: \(item.description)")
+        }
         let encoder = JSONEncoder()
-        if let encodedData = try? encoder.encode(items) {
+        if let encodedData = try? encoder.encode(item) {
             store.set(encodedData, forKey: userDefaultsKey)
             logger.debug("Saved: \(encodedData.description)")
         }
     }
     
-    private func loadFromUserDefaults() -> Set<T> {
-        if let data = store.data(forKey: userDefaultsKey) {
-            let decoder = JSONDecoder()
-            if let items = try? decoder.decode(Set<T>.self, from: data) {
-                logger.debug("Loaded: \(items.description)")
-                return items
-            } else {
-                logger.error("Could not decode data.")
-            }
+    private func loadFromUserDefaults() -> Item {
+        guard let data = store.data(forKey: userDefaultsKey) else {
+            return defaultValue
         }
-        return []
+        
+        do {
+            let item = try JSONDecoder().decode(Item.self, from: data)
+            if let item = item as? CustomStringConvertible {
+                logger.debug("Decoded: \(item.description)")
+            }
+            return item
+        } catch {
+            logger.error("Failed to decode value for key \(self.userDefaultsKey)")
+            return defaultValue
+        }
     }
 }
+
+
